@@ -10,7 +10,7 @@ const lexend = Lexend({
 })
 
 export const metadata = {
-  title: "Notes App",
+  title: "SageQuill",
   description: "AI-powered notes",
 }
 
