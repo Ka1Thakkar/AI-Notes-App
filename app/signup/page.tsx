@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { AlertCircle } from 'lucide-react'
 
-export default async function SignUpPage({ searchParams }: { searchParams?: { error?: string } }) {
+export default async function SignUpPage() {
   const supabase = await createClient()
   const {
     data: { session },
@@ -19,8 +19,6 @@ export default async function SignUpPage({ searchParams }: { searchParams?: { er
   if (session) {
     redirect('/dashboard')
   }
-
-  const error = searchParams?.error
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
