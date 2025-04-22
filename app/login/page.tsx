@@ -33,12 +33,12 @@ export default async function LoginPage() {
         </CardHeader>
 
         <CardContent className="space-y-4">
-          {error && (
+          {/* {error && (
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>{error}</AlertDescription>
             </Alert>
-          )}
+          )} */}
 
           <form action={login} method="post" className="space-y-4">
             <div className="space-y-2">
