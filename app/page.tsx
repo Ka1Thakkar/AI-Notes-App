@@ -1,7 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { Navbar } from "@/components/navbar"
+import { Navbar } from "@/components/Navbar"
 import { Features } from "@/components/features"
 import { About } from "@/components/about"
 import { Testimonials } from "@/components/testimonials"
