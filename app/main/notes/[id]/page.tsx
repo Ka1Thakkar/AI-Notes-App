@@ -276,10 +276,8 @@ export default function NotePage() {
             onChange={(e) => setContent(e.target.value)}
             placeholder="Write your note here…"
             rows={6}
-            className="border-none shadow-none focus-visible:ring-0 focus-visible:border-none w-full! text-lg! font-light!"
+            className="border-none shadow-none focus-visible:ring-0 focus-visible:border-none !w-full !text-lg !font-light"
           />
-          {/* <ReactMarkdown>{content}</ReactMarkdown> */}
-          {/* <MDEditor value={content} onChange={(val) => setContent(val || "")} className="prose dark:prose-invert w-screen bg-yellow-500" /> */}
         </div>
 
         <div className="flex space-x-2 mt-4">
