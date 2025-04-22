@@ -1,8 +1,8 @@
 @import "tailwindcss";
-@plugin "@tailwindcss/typography";
+/* @plugin "@tailwindcss/typography"; */
 /* @import "tw-animate-css"; */
 
-@custom-variant dark (&:is(.dark *));
+/* @custom-variant dark (&:is(.dark *)); */
 
 @theme inline {
   --color-background: var(--background);
@@ -42,7 +42,7 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-}
+};
 
 :root {
   /* Radius */
@@ -96,58 +96,7 @@
   --sidebar-accent-foreground: #FFFFFF;
   --sidebar-border:        #CED4D0;
   --sidebar-ring:          #A9B497;
-}
-
-.dark {
-/* Core palette */
-    --background:            #0F1E1B; /* very dark slate */
-    --foreground:            #E0E5E2; /* light neutral */
-
-    /* Primary & text on primary */
-    --primary:               #55624C; /* deep sage */
-    --primary-foreground:    #F4F5F0; /* light neutral */
-
-    /* Secondary & text on secondary */
-    --secondary:             #4F5E4E; /* muted dark sage */
-    --secondary-foreground:  #E0E5E2; /* light neutral */
-
-    /* Accent & text on accent */
-    --accent:                #8C3429; /* dark rust */
-    --accent-foreground:     #F4F5F0; /* light neutral */
-
-    /* Muted & text on muted */
-    --muted:                 #36403C; /* dark sage‑grey */
-    --muted-foreground:      #9EA3A0; /* medium grey */
-
-    /* Destructive (errors, deletes) */
-    --destructive:           #E06E78; /* muted red */
-
-    /* Surfaces */
-    --card:                  #1A1E1C; /* dark card background */
-    --card-foreground:       #E0E5E2; /* light neutral */
-
-    /* Borders, inputs, rings */
-    --border:                #3A3F3D; /* subtle dark border */
-    --input:                 #141918; /* dark input background */
-    --ring:                  #5E6F53; /* muted focus ring */
-
-    /* Chart hints */
-    --chart-1:               #55624C;
-    --chart-2:               #4F5E4E;
-    --chart-3:               #8C3429;
-    --chart-4:               #A58362; /* dark beige */
-    --chart-5:               #5A6A6A; /* grey */
-
-    /* Sidebar overrides */
-    --sidebar:               #0F1E1B;
-    --sidebar-foreground:    #E0E5E2;
-    --sidebar-primary:       #55624C;
-    --sidebar-primary-foreground: #E0E5E2;
-    --sidebar-accent:        #8C3429;
-    --sidebar-accent-foreground: #F4F5F0;
-    --sidebar-border:        #3A3F3D;
-    --sidebar-ring:          #5E6F53;
-}
+};
 
 @layer base {
   * {
