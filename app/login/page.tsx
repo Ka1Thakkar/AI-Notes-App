@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { AlertCircle } from 'lucide-react'
 
-export default async function LoginPage({ searchParams }: { searchParams?: { error?: string } }) {
+export default async function LoginPage() {
   const supabase = await createClient()
   const {
     data: { session },
