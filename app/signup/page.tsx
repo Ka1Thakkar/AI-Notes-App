@@ -1,27 +1,37 @@
 // app/signup/page.tsx
-'use client'
+"use client"
 
-import { useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { AlertCircle } from 'lucide-react'
-import { signup } from './actions'
+// force this page to be dynamic so useSearchParams won’t break prerender
+export const dynamic = "force-dynamic";
+
+import { useState } from "react"
+import { useSearchParams, useRouter } from "next/navigation"
+import { signup } from "./actions"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { AlertCircle } from "lucide-react"
 
 export default function SignupPage() {
   const searchParams = useSearchParams()
-  const errorFromUrl = searchParams.get('error')
-  const [firstName, setFirstName] = useState('')
-  const [lastName,  setLastName]  = useState('')
-  const [age,       setAge]       = useState('')
-  const [email,     setEmail]     = useState('')
-  const [password,  setPassword]  = useState('')
-  const [error,     setError]     = useState<string | null>(errorFromUrl)
-  const [isLoading, setIsLoading] = useState(false)
+  const errorFromUrl = searchParams.get("error")
   const router = useRouter()
+
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("")
+  const [age, setAge] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState<string | null>(errorFromUrl)
+  const [isLoading, setIsLoading] = useState(false)
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[var(--background)] text-[var(--foreground)] px-4">
@@ -47,7 +57,7 @@ export default function SignupPage() {
                 id="firstName"
                 name="firstName"
                 type="text"
-                placeholder="First Name"
+                placeholder="John"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 required
@@ -60,7 +70,7 @@ export default function SignupPage() {
                 id="lastName"
                 name="lastName"
                 type="text"
-                placeholder="Last Name"
+                placeholder="Doe"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 required
@@ -107,13 +117,13 @@ export default function SignupPage() {
             </div>
 
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? 'Signing up…' : 'Sign up'}
+              {isLoading ? "Signing up…" : "Sign up"}
             </Button>
           </form>
         </CardContent>
         <CardFooter className="text-center">
           <p className="text-sm text-[var(--muted-foreground)]">
-            Already have an account?{' '}
+            Already have an account?{" "}
             <a
               href="/login"
               className="text-[var(--primary)] underline underline-offset-4 hover:text-[var(--primary)]/90"
