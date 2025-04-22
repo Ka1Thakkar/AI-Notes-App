@@ -1,82 +1,125 @@
 // app/signup/page.tsx
-import { redirect } from 'next/navigation'
-import { createClient } from '@/utils/supabase/server'
-import { signup } from './actions'
-import Link from 'next/link'
+'use client'
+
+import { useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { AlertCircle } from 'lucide-react'
+import { signup } from './actions'
 
-export default async function SignUpPage() {
-  const supabase = await createClient()
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
-
-  if (session) {
-    redirect('/dashboard')
-  }
+export default function SignupPage() {
+  const searchParams = useSearchParams()
+  const errorFromUrl = searchParams.get('error')
+  const [firstName, setFirstName] = useState('')
+  const [lastName,  setLastName]  = useState('')
+  const [age,       setAge]       = useState('')
+  const [email,     setEmail]     = useState('')
+  const [password,  setPassword]  = useState('')
+  const [error,     setError]     = useState<string | null>(errorFromUrl)
+  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
+    <div className="flex min-h-screen items-center justify-center bg-[var(--background)] text-[var(--foreground)] px-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">Sign up</CardTitle>
-          <CardDescription className="text-center">
-            Create a new account
-          </CardDescription>
         </CardHeader>
-
         <CardContent className="space-y-4">
-          {/* {error && (
+          {error && (
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>{error}</AlertDescription>
             </Alert>
-          )} */}
+          )}
+          <form
+            action={signup}
+            onSubmit={() => setIsLoading(true)}
+            className="space-y-4"
+          >
+            <div className="space-y-2">
+              <Label htmlFor="firstName">First Name</Label>
+              <Input
+                id="firstName"
+                name="firstName"
+                type="text"
+                placeholder="First Name"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                required
+              />
+            </div>
 
-          <form action={signup} method="post" className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="lastName">Last Name</Label>
+              <Input
+                id="lastName"
+                name="lastName"
+                type="text"
+                placeholder="Last Name"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="age">Age</Label>
+              <Input
+                id="age"
+                name="age"
+                type="number"
+                placeholder="30"
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+                required
+                min={1}
+              />
+            </div>
+
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" name="email" type="email" placeholder="name@example.com" required />
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
             </div>
+
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" name="password" type="password" required />
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
             </div>
-            <Button type="submit" className="w-full">
-              Sign up
-            </Button>
-          </form>
 
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
-                Or continue with
-              </span>
-            </div>
-          </div>
-
-          <form action={signup} method="post">
-            <input type="hidden" name="provider" value="google" />
-            <Button variant="outline" className="w-full">
-              Google
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? 'Signing up…' : 'Sign up'}
             </Button>
           </form>
         </CardContent>
-
-        <CardFooter className="flex justify-center">
-          <p className="text-sm text-muted-foreground">
+        <CardFooter className="text-center">
+          <p className="text-sm text-[var(--muted-foreground)]">
             Already have an account?{' '}
-            <Link href="/login" className="text-primary underline underline-offset-4 hover:text-primary/90">
+            <a
+              href="/login"
+              className="text-[var(--primary)] underline underline-offset-4 hover:text-[var(--primary)]/90"
+            >
               Sign in
-            </Link>
+            </a>
           </p>
         </CardFooter>
       </Card>

@@ -2,8 +2,9 @@
 "use client"
 
 import { ReactNode, useState } from "react"
-import { Sheet, SheetTrigger, SheetContent, SheetTitle } from "@/components/ui/sheet"
-import {SidebarSimple} from "@phosphor-icons/react"
+import { usePathname } from "next/navigation"
+import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
+import { SidebarSimple } from "@phosphor-icons/react"
 import Sidebar from "./Sidebar"
 import useIsMobile from "@/hooks/useIsMobile"
 import { cn } from "@/lib/utils"
@@ -11,9 +12,16 @@ import { cn } from "@/lib/utils"
 export default function AppLayout({ children }: { children: ReactNode }) {
   const isMobile = useIsMobile()
   const [open, setOpen] = useState(false)
+  const pathname = usePathname()
+
+  // Don’t wrap these public routes in the sidebar layout
+  const publicPaths = ["/", "/login", "/signup"]
+  if (publicPaths.includes(pathname)) {
+    return <>{children}</>
+  }
 
   return (
-    <div className={cn("h-screen overflow-hidden", isMobile ? "flex-col" : "flex")}>
+    <div className={cn("h-screen overflow-hidden bg-primary/15", isMobile ? "flex-col" : "flex")}>
       {/* Desktop: always show sidebar */}
       {!isMobile && <Sidebar />}
 
@@ -26,16 +34,13 @@ export default function AppLayout({ children }: { children: ReactNode }) {
             </button>
           </SheetTrigger>
           <SheetContent side="left" className="w-full">
-            <SheetTitle className="hidden" />
             <Sidebar />
           </SheetContent>
         </Sheet>
       )}
 
       {/* Main content: fills remaining space and scrolls */}
-      <main className="flex-1 overflow-auto">
-        {children}
-      </main>
+      <main className="flex-1 overflow-auto">{children}</main>
     </div>
   )
 }

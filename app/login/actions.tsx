@@ -22,6 +22,6 @@ export async function login(formData: FormData) {
     if (error) redirect(`/login?error=${encodeURIComponent(error.message)}`)
   }
 
-  revalidatePath('/', 'layout')
-  redirect('/dashboard')
+  revalidatePath('/main', 'layout')
+  redirect('/main/dashboard')
 }

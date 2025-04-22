@@ -16,8 +16,9 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CalendarDots, Lightning, NotePencil } from "@phosphor-icons/react";
+import { ArrowClockwise, CalendarDots, Clipboard, Lightning, NotePencil, CheckCircle } from "@phosphor-icons/react";
 import {SyncLoader} from "react-spinners";
+import ReactMarkdown from "react-markdown";
 
 interface DateItem {
   label: string;
@@ -80,13 +81,14 @@ export default function NotePage() {
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["notes"] });
-      router.push("/dashboard");
+      router.push("/main/dashboard");
     }
   });
 
   // Summarize
   const handleSummarize = async () => {
     setSummarizing(true);
+    setSummary(null);
     try {
       const res = await fetch("/api/summarize", {
         method: "POST",
@@ -121,54 +123,41 @@ export default function NotePage() {
     }
   };
 
+  const [isCopied, setIsCopied] = useState(false);
+  
+  // ...existing code...
+  
+  const handleCopy = () => {
+    navigator.clipboard.writeText(summary || "");
+    setIsCopied(true);
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 2000); // Show check mark for 2 seconds
+  };
+
   if (isLoading) return <p className="p-4">Loading note…</p>;
   if (isError) return <p className="p-4 text-red-500">Error loading note.</p>;
 
   return (
-    <div className="p-6 h-full flex gap-5 overflow-auto">
+    <div className="p-6 h-fit flex gap-5 overflow-auto pb-10">
       {/* Edit Area */}
-      <div className="w-2/3">
+      <div className="">
       <div className="space-y-4">
         <input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Note Title"
-          className="border-2 border-white shadow-none focus-visible:ring-0 focus-visible:border-neutral-50 text-xl font-semibold"
+          className="border-none shadow-none focus-visible:ring-0 focus-visible:border-none text-3xl font-semibold w-full px-2"
         />
-        <Textarea
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="Write your note here…"
-          rows={6}
-          className="text-lg border-2 border-white shadow-none focus-visible:ring-0 focus-visible:border-neutral-50"
-        />
-      </div>
-
-      <div className="flex space-x-2 mt-4">
-        <Button onClick={() => updateNote.mutate()} disabled={updateNote.isPending}>
-          {updateNote.isPending ? "Saving…" : "Save"}
-        </Button>
-        <Button variant="destructive" onClick={() => deleteNote.mutate()}>
-          Delete
-        </Button>
-        {/* <Button variant="secondary" onClick={handleSummarize} disabled={summarizing}>
-          {summarizing ? "Summarizing…" : "Summarize"}
-        </Button> */}
-      </div>
-      </div>
-      {/* Summary & Details (scrollable) */}
-      <div className="space-y-6 w-1/3">
+        <div className="">
         {summary ? (
-          <Card className="bg-neutral-50">
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2"><Lightning weight="duotone" />AI Summary</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="font-light">{summary}</p>
-
+          <div className="max-w-xl">
+          <div className="bg-neutral-50 p-4 rounded-lg space-y-4">
+            <h1 className="flex items-center gap-2"><Lightning weight="duotone" className="text-yellow-600" />AI Summary</h1>
+            <p className="font-light">{summary}</p>
               {dates.length > 0 && (
                 <>
-                  <h4 className="font-semibold flex gap-2 items-center"><CalendarDots weight="duotone" size={20} /> Timeline</h4>
+                  <h4 className="font-semibold flex gap-2 items-center pt-2"><CalendarDots weight="duotone" size={20} /> Timeline</h4>
                   <ul className="list-disc pl-5">
                     {dates.map((d, i) => (
                       <li className="font-light" key={i}>
@@ -206,18 +195,58 @@ export default function NotePage() {
                   </Badge>
                 </div>
               )}
-            </CardContent>
-          </Card>
+          </div>
+          <div className="pt-4 flex gap-0 items-center">
+            <button onClick={handleSummarize} className=" flex gap-2 items-center px-5 py-2 bg-primary rounded-lg text-xs">
+              <ArrowClockwise size={14} weight="bold" className="text-black" />
+              Generate Again
+            </button>
+<button 
+      className="ml-2 flex gap-2 items-center p-2 bg-primary rounded-lg text-xs" 
+      onClick={handleCopy}
+    >
+      {isCopied ? (
+        <CheckCircle size={16} weight="duotone" className="text-black" />
+      ) : (
+        <Clipboard size={16} weight="duotone" className="text-black" />
+      )}
+    </button>
+          </div>
+          </div>
         ) : (
-          <Button variant={"ghost"} onClick={handleSummarize} className="bg-gray-50 text-black w-full p-7">
-                <Lightning size={20} weight="duotone" />
-                <p className="text-lg">
+          <Button variant={"default"} onClick={handleSummarize} className="bg-neutral-50 hover:bg-primary/50 text-black p-7">
+                <Lightning size={20} weight="duotone" className="text-yellow-600" />
+                <p className="">
                 {!summarizing ? "Generate AI Summary": "Generating AI Summary"}
                 </p>
                 {summarizing && <SyncLoader className="ml-2" size={5} />}
           </Button>
         )}
       </div>
+        <Textarea
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          placeholder="Write your note here…"
+          rows={6}
+          className="border-none shadow-none focus-visible:ring-0 focus-visible:border-none !w-full !text-lg !font-light"
+        />
+        {/* <ReactMarkdown>{content}</ReactMarkdown> */}
+        {/* <MDEditor value={content} onChange={(val) => setContent(val || "")} className="prose dark:prose-invert w-screen bg-yellow-500" /> */}
+      </div>
+
+      <div className="flex space-x-2 mt-4">
+        <Button onClick={() => updateNote.mutate()} disabled={updateNote.isPending}>
+          {updateNote.isPending ? "Saving…" : "Save"}
+        </Button>
+        <Button variant="destructive" onClick={() => deleteNote.mutate()}>
+          Delete
+        </Button>
+        {/* <Button variant="secondary" onClick={handleSummarize} disabled={summarizing}>
+          {summarizing ? "Summarizing…" : "Summarize"}
+        </Button> */}
+      </div>
+      </div>
+      {/* Summary & Details (scrollable) */}
     </div>
   );
 }

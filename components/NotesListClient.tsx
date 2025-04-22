@@ -41,7 +41,7 @@ export default function NotesListClient({ userId }: { userId: string }) {
         <ul>
           {notes?.map((note) => (
             <li key={note.id}>
-              <Link href={`/notes/${note.id}`}>{note.title}</Link>
+              <Link href={`/main/notes/${note.id}`}>{note.title}</Link>
               <Button onClick={() => deleteNote.mutate(note.id)}>Delete</Button>
             </li>
           ))}

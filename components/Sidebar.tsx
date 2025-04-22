@@ -14,6 +14,8 @@ import {
   Plus,
   Note,
   SignOut,
+  Feather,
+  SidebarSimple,
 } from "@phosphor-icons/react";
 import useIsMobile from "@/hooks/useIsMobile";
 import {
@@ -106,7 +108,7 @@ export default function Sidebar() {
       setTitle("");
       setContent("");
       setOpen(false);
-      router.push(`/notes/${newId}`);
+      router.push(`/main/notes/${newId}`);
     },
   });
 
@@ -117,10 +119,10 @@ export default function Sidebar() {
   };
 
   // back‐to‐dashboard
-  const onBack = () => router.push("/dashboard");
+  const onBack = () => router.push("/main/dashboard");
 
   // current note highlight
-  const currentId = pathname.startsWith("/notes/") ? pathname.split("/")[2] : null;
+  const currentId = pathname.startsWith("/main/notes/") ? pathname.split("/")[3] : null;
 
   if (pathname.startsWith("/login") || pathname.startsWith("/signup")) {
   return null;
@@ -130,20 +132,27 @@ export default function Sidebar() {
     <aside
       className={cn(
         "flex flex-col bg-white border-r transition-width ease-in-out duration-200 h-full",
-        !isMobile && collapsed ? "w-16" : "",
-        !isMobile && !collapsed ? "w-64" : "",
+        !isMobile && collapsed ? "w-16" : "rounded-r-lg",
+        !isMobile && !collapsed ? "w-64" : "rounded-r-lg",
         isMobile ? "w-full" : ""
       )}
     >
       {/* Header */}
-      <div className={cn("flex items-center justify-between p-3 border-b", collapsed && "flex-col-reverse")}>
-          <button onClick={onBack} className="flex items-center gap-2 p-1 rounded hover:bg-gray-100">
+      <div className={cn("flex items-center justify-between border-b flex-col-reverse py-2")}>
+          {/* <button onClick={onBack} className="flex items-center gap-2 rounded w-full px-4 py-2 text-sm truncate hover:bg-primary/15">
             <HouseLine size={24} weight="duotone" />
             {!collapsed && <span className="text-sm font-medium">Dashboard</span>}
-          </button>
-        <button className="p-1 rounded hover:bg-gray-100" onClick={() => setCollapsed(!collapsed)}>
-          {collapsed ? <CaretLineRight size={24} /> : <CaretLineLeft size={24} />}
-        </button>
+          </button> */}
+          <div className={cn("w-full flex items-center gap-1 justify-between py-2", collapsed ? "flex-col" : "flex-row px-4")}>
+            <button onClick={onBack} className="flex items-center gap-2 cursor-pointer">
+              <Feather size={24} weight="duotone" className="text-primary" />
+              {!collapsed && <p className="text-lg font-semibold">SageQuill</p>}
+            </button>
+        {!isMobile &&
+        <button className={cn("rounded hover:bg-primary/15", collapsed && "w-full flex items-center gap-2 rounded px-4 py-2 text-sm truncate hover:bg-primary/15")} onClick={() => setCollapsed(!collapsed)}>
+          {collapsed ? <SidebarSimple weight="duotone" size={24} /> : <SidebarSimple weight="duotone" size={24} />}
+        </button>}
+        </div>
       </div>
 
       {/* Notes List */}
@@ -152,15 +161,15 @@ export default function Sidebar() {
           {notes.map((note) => {
             const active = note.id === currentId;
             return (
-              <Link key={note.id} href={`/notes/${note.id}`}>
+              <Link key={note.id} href={`/main/notes/${note.id}`}>
                 <div
                   className={cn(
-                    "px-4 py-2 text-sm truncate flex items-center gap-2",
-                    active ? "bg-blue-100 font-medium" : "hover:bg-gray-50"
+                    "px-4 py-2 text-sm flex items-center gap-2",
+                    active ? "bg-primary/25 font-medium" : "hover:bg-primary/15"
                   )}
                 >
-                  <Note size={28} weight="duotone" />
-                  {!collapsed && <p className="font-medium">{note.title || "Untitled"}</p>}
+                  <Note size={!collapsed ? 20 : 28} weight="duotone" className="min-w-fit" />
+                  {!collapsed && <p className="font-medium truncate">{note.title || "Untitled"}</p>}
                 </div>
               </Link>
             );
@@ -191,8 +200,8 @@ export default function Sidebar() {
                 }}
                 className="flex-1 overflow-auto space-y-4 mt-4 px-2"
               >
-                <Input placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
-                <Textarea placeholder="Content" rows={4} value={content} onChange={(e) => setContent(e.target.value)} required />
+                <Input placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} required className="focus-visible:ring-0" />
+                <Textarea placeholder="Content" rows={4} value={content} onChange={(e) => setContent(e.target.value)} required className="focus-visible:ring-0 h-32" />
               </form>
               <DialogFooter className="flex justify-end px-2 py-2">
                 <Button type="submit" disabled={createNote.isPending}>
@@ -209,7 +218,7 @@ export default function Sidebar() {
                 {!collapsed && <span className="ml-2">New Note</span>}
               </Button>
             </SheetTrigger>
-            <SheetContent side="bottom" className="max-h-full w-full flex flex-col">
+            <SheetContent side="right" className="max-h-full w-full flex flex-col">
               <SheetHeader>
                 <SheetTitle>New Note</SheetTitle>
                 <SheetDescription>Enter title & content.</SheetDescription>
@@ -221,8 +230,8 @@ export default function Sidebar() {
                 }}
                 className="overflow-auto space-y-4 px-4"
               >
-                <Input placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
-                <Textarea placeholder="Content" rows={6} value={content} onChange={(e) => setContent(e.target.value)} required />
+                <Input placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} required className="focus-visible:ring-0" />
+                <Textarea placeholder="Content" rows={6} value={content} onChange={(e) => setContent(e.target.value)} required className="h-32 focus-visible:ring-0" />
               </form>
               <SheetFooter className="flex justify-end px-4 py-2">
                 <Button type="submit" disabled={createNote.isPending}>

@@ -1,103 +1,64 @@
-import Image from "next/image";
+import Link from "next/link"
+import Image from "next/image"
+import { Button } from "@/components/ui/button"
+import { Navbar } from "@/components/navbar"
+import { Features } from "@/components/features"
+import { About } from "@/components/about"
+import { Testimonials } from "@/components/testimonials"
+import { Footer } from "@/components/footer"
 
-export default function Home() {
+export default function LandingPage() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background">
+      <Navbar />
+      {/* Hero Section */}
+      <section className="relative overflow-hidden min-h-screen bg-gradient-to-b from-primary/0 to-primary/75 via-primary/75 w-full">
+        <div className="container relative z-10 mx-auto px-4 py-12 sm:px-6 lg:items-center flex flex-col items-center justify-center lg:gap-x-16 lg:px-8 w-full">
+          <div className="mx-auto w-full lg:mx-0 lg:flex lg:flex-col items-center justify-center lg:pt-10">
+            <h1 className="text-4xl lg:max-w-4xl text-center font-bold tracking-tight text-gray-900 dark:text-white sm:text-6xl">
+              Capture ideas and organize your thoughts with SageQuill
+            </h1>
+            <p className="mt-6 lg:text-lg leading-8 text-neutral-800 font-light dark:text-gray-300 max-w-2xl text-center">
+              SageQuill helps you create, organize, and summarize your notes with the power of artificial intelligence.
+            </p>
+            <div className="mt-10 flex items-center justify-center gap-x-6">
+              <Button size="lg" className="rounded-full px-8">
+                <Link href="/signup">Get Started</Link>
+              </Button>
+              <Button variant="outline" size="lg" className="rounded-full px-8 hover:bg-secondary/75">
+                <Link href="/login">Sign In</Link>
+              </Button>
+            </div>
+          </div>
+          <div className="mt-16 sm:mt-24 lg:mt-20 lg:flex lg:flex-col items-center justify-center aspect-[9:16] lg:aspect-auto">
+            <div className="relative">
+              <Image
+                src="/product.png"
+                alt="AI Notes App Dashboard"
+                width={1200}
+                height={1200}
+                className="rounded-lg shadow-xl ring-1 ring-gray-900/10 dark:ring-white/10 aspect-[9/10] w-full lg:w-full lg:aspect-video object-cover object-top-left"
+                priority
+                quality={100}
+              />
+              <div className="absolute -bottom-6 -left-6 h-24 w-24 rounded-full bg-blue-600 blur-3xl opacity-30 dark:opacity-20"></div>
+              <div className="absolute -top-6 -right-6 h-24 w-24 rounded-full bg-purple-600 blur-3xl opacity-30 dark:opacity-20"></div>
+            </div>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
+
+      {/* About Section */}
+      <About />
+
+      {/* Features Section */}
+      <Features />
+
+      {/* Testimonials Section */}
+      <Testimonials />
+
+      {/* Footer */}
+      <Footer />
     </div>
-  );
+  )
 }
