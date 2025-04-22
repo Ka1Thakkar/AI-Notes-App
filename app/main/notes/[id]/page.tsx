@@ -25,7 +25,6 @@ import {
   CheckCircle,
 } from "@phosphor-icons/react";
 import { SyncLoader } from "react-spinners";
-import ReactMarkdown from "react-markdown";
 
 interface DateItem {
   label: string;
