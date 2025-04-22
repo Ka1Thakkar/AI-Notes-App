@@ -1,107 +1,75 @@
-/* @import "tailwindcss"; */
+/* globals.css */
+
+/* 1) Tailwind base layers */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-}
-
+/* 2) Your CSS vars */
 :root {
   /* Radius */
   --radius: 0.625rem;
 
   /* Core palette */
-  --background: oklch(0.973 0.031 44.9); /* #F4F5F0 */
-  --foreground: oklch(0.162 0.137 189.6); /* #02111B */
+  --background:                   oklch(0.973 0.031 44.9);  /* #F4F5F0 */
+  --foreground:                   oklch(0.162 0.137 189.6); /* #02111B */
 
   /* Primary & text on primary */
-  --primary: oklch(0.75 0.083 54.3); /* #B2AC88 */
-  --primary-foreground: oklch(0.162 0.137 189.6); /* #02111B */
+  --primary:                      oklch(0.750 0.083 54.3);  /* #B2AC88 */
+  --primary-foreground:           oklch(0.162 0.137 189.6); /* #02111B */
 
   /* Secondary & text on secondary */
-  --secondary: oklch(0.609 0.081 133.9); /* #768567 */
-  --secondary-foreground: oklch(0.973 0.031 44.9); /* #F4F5F0 */
+  --secondary:                    oklch(0.609 0.081 133.9); /* #768567 */
+  --secondary-foreground:         oklch(0.973 0.031 44.9);  /* #F4F5F0 */
 
   /* Accent & text on accent */
-  --accent: oklch(0.507 0.732 2.4); /* #CD4631 */
-  --accent-foreground: oklch(1.003 0.031 28.9); /* #FFFFFF */
+  --accent:                       oklch(0.507 0.732 2.4);   /* #CD4631 */
+  --accent-foreground:            oklch(1.003 0.031 28.9);  /* #FFFFFF */
 
   /* Muted & text on muted */
-  --muted: oklch(0.915 0.021 96.4); /* #DDE3DE */
-  --muted-foreground: oklch(0.515 0.07 174); /* #5A6A6A */
+  --muted:                        oklch(0.915 0.021 96.4);  /* #DDE3DE */
+  --muted-foreground:             oklch(0.515 0.070 174.0); /* #5A6A6A */
 
   /* Destructive (errors, deletes) */
-  --destructive: oklch(0.46 0.865 357.9); /* #CD3146 */
+  --destructive:                  oklch(0.460 0.865 357.9); /* #CD3146 */
 
   /* Surfaces */
-  --card: oklch(1.003 0.031 28.9); /* #FFFFFF */
-  --card-foreground: oklch(0.162 0.137 189.6); /* #02111B */
+  --card:                         oklch(1.003 0.031 28.9);  /* #FFFFFF */
+  --card-foreground:              oklch(0.162 0.137 189.6); /* #02111B */
 
   /* Borders, inputs, rings */
-  --border: oklch(0.869 0.019 102.1); /* #CED4D0 */
-  --input: oklch(0.99 0.025 44.8); /* #F9FBF9 */
-  --ring: oklch(0.766 0.064 117.6); /* #A9B497 */
+  --border:                       oklch(0.869 0.019 102.1); /* #CED4D0 */
+  --input:                        oklch(0.990 0.025 44.8);  /* #F9FBF9 */
+  --ring:                         oklch(0.766 0.064 117.6); /* #A9B497 */
 
   /* Chart hints */
-  --chart-1: oklch(0.75 0.083 54.3); /* #B2AC88 */
-  --chart-2: oklch(0.609 0.081 133.9); /* #768567 */
-  --chart-3: oklch(0.507 0.732 2.4); /* #CD4631 */
-  --chart-4: oklch(0.83 0.185 23.5); /* #E0C097 */
-  --chart-5: oklch(0.515 0.07 174); /* #5A6A6A */
+  --chart-1:                      oklch(0.750 0.083 54.3);  /* #B2AC88 */
+  --chart-2:                      oklch(0.609 0.081 133.9); /* #768567 */
+  --chart-3:                      oklch(0.507 0.732 2.4);   /* #CD4631 */
+  --chart-4:                      oklch(0.830 0.185 23.5);  /* #E0C097 */
+  --chart-5:                      oklch(0.515 0.070 174.0); /* #5A6A6A */
 
   /* Sidebar overrides */
-  --sidebar: oklch(0.973 0.031 44.9); /* #F4F5F0 */
-  --sidebar-foreground: oklch(0.162 0.137 189.6); /* #02111B */
-  --sidebar-primary: oklch(0.75 0.083 54.3); /* #B2AC88 */
-  --sidebar-primary-foreground: oklch(0.162 0.137 189.6); /* #02111B */
-  --sidebar-accent: oklch(0.507 0.732 2.4); /* #CD4631 */
-  --sidebar-accent-foreground: oklch(1.003 0.031 28.9); /* #FFFFFF */
-  --sidebar-border: oklch(0.869 0.019 102.1); /* #CED4D0 */
-  --sidebar-ring: oklch(0.766 0.064 117.6); /* #A9B497 */
+  --sidebar:                      oklch(0.973 0.031 44.9);  /* #F4F5F0 */
+  --sidebar-foreground:           oklch(0.162 0.137 189.6); /* #02111B */
+  --sidebar-primary:              oklch(0.750 0.083 54.3);  /* #B2AC88 */
+  --sidebar-primary-foreground:   oklch(0.162 0.137 189.6); /* #02111B */
+  --sidebar-accent:               oklch(0.507 0.732 2.4);   /* #CD4631 */
+  --sidebar-accent-foreground:    oklch(1.003 0.031 28.9);  /* #FFFFFF */
+  --sidebar-border:               oklch(0.869 0.019 102.1); /* #CED4D0 */
+  --sidebar-ring:                 oklch(0.766 0.064 117.6); /* #A9B497 */
 }
 
+/* 3) Global base styles using Tailwind v3’s arbitrary-value @apply */
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
+  html, body {
+    @apply bg-[var(--background)] text-[var(--foreground)] font-sans;
   }
-  body {
-    @apply bg-background text-foreground;
+
+  /* apply a 1px border and ring color from your vars */
+  *, ::before, ::after {
+    @apply border border-[var(--border)];
+    outline: 1px solid var(--ring);
+    outline-offset: 2px;
   }
 }
