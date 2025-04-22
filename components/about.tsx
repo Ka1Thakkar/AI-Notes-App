@@ -53,7 +53,7 @@ export function About() {
               width={1200}
               height={400}
               quality={100}
-              className="rounded-lg object-cover lg:min-w-max object-top-left aspect-[9/10] w-full lg:aspect-video"
+              className="rounded-lg object-cover lg:min-w-max object-top-left aspect-9/10 w-full lg:aspect-video"
             />
             <div className="absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10 dark:ring-white/10"></div>
           </div> */}

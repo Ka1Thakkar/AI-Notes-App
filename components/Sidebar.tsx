@@ -139,7 +139,7 @@ export default function Sidebar() {
     >
       {/* Header */}
       <div className={cn("flex items-center justify-between border-b flex-col-reverse py-2")}>
-          {/* <button onClick={onBack} className="flex items-center gap-2 rounded w-full px-4 py-2 text-sm truncate hover:bg-primary/15">
+          {/* <button onClick={onBack} className="flex items-center gap-2 rounded-sm w-full px-4 py-2 text-sm truncate hover:bg-primary/15">
             <HouseLine size={24} weight="duotone" />
             {!collapsed && <span className="text-sm font-medium">Dashboard</span>}
           </button> */}
@@ -149,7 +149,7 @@ export default function Sidebar() {
               {!collapsed && <p className="text-lg font-semibold">SageQuill</p>}
             </button>
         {!isMobile &&
-        <button className={cn("rounded hover:bg-primary/15", collapsed && "w-full flex items-center gap-2 rounded px-4 py-2 text-sm truncate hover:bg-primary/15")} onClick={() => setCollapsed(!collapsed)}>
+        <button className={cn("rounded-sm hover:bg-primary/15", collapsed && "w-full flex items-center gap-2 rounded-sm px-4 py-2 text-sm truncate hover:bg-primary/15")} onClick={() => setCollapsed(!collapsed)}>
           {collapsed ? <SidebarSimple weight="duotone" size={24} /> : <SidebarSimple weight="duotone" size={24} />}
         </button>}
         </div>

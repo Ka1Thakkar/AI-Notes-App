@@ -12,7 +12,7 @@ export default function LandingPage() {
     <div className="flex min-h-screen flex-col items-center justify-center bg-background">
       <Navbar />
       {/* Hero Section */}
-      <section className="relative overflow-hidden min-h-screen bg-gradient-to-b from-primary/0 to-primary/75 via-primary/75 w-full">
+      <section className="relative overflow-hidden min-h-screen bg-linear-to-b from-primary/0 to-primary/75 via-primary/75 w-full">
         <div className="container relative z-10 mx-auto px-4 py-12 sm:px-6 lg:items-center flex flex-col items-center justify-center lg:gap-x-16 lg:px-8 w-full">
           <div className="mx-auto w-full lg:mx-0 lg:flex lg:flex-col items-center justify-center lg:pt-10">
             <h1 className="text-4xl lg:max-w-4xl text-center font-bold tracking-tight text-gray-900 dark:text-white sm:text-6xl">
@@ -42,7 +42,7 @@ export default function LandingPage() {
                 alt="AI Notes App Dashboard"
                 width={1200}
                 height={1200}
-                className="rounded-lg shadow-xl ring-1 ring-gray-900/10 dark:ring-white/10 aspect-[9/10] w-full lg:w-full lg:aspect-video object-cover object-top-left"
+                className="rounded-lg shadow-xl ring-1 ring-gray-900/10 dark:ring-white/10 aspect-9/10 w-full lg:w-full lg:aspect-video object-cover object-top-left"
                 priority
                 quality={100}
               />

@@ -40,7 +40,7 @@ export function Features() {
   ]
 
   return (
-    <section id="features" className="py-24 w-full flex items-center justify-center bg-gradient-to-b from-primary/75 to-primary/50 via-primary/75 min-h-screen">
+    <section id="features" className="py-24 w-full flex items-center justify-center bg-linear-to-b from-primary/75 to-primary/50 via-primary/75 min-h-screen">
       <div className="container px-4 md:px-6 w-full">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2 flex flex-col items-center justify-center">

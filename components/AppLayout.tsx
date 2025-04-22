@@ -29,7 +29,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       {isMobile && (
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
-            <button className="m-2 p-2 rounded hover:bg-gray-100">
+            <button className="m-2 p-2 rounded-sm hover:bg-gray-100">
               <SidebarSimple size={24} />
             </button>
           </SheetTrigger>
