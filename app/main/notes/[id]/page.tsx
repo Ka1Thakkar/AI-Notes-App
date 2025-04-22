@@ -16,8 +16,15 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowClockwise, CalendarDots, Clipboard, Lightning, NotePencil, CheckCircle } from "@phosphor-icons/react";
-import {SyncLoader} from "react-spinners";
+import {
+  ArrowClockwise,
+  CalendarDots,
+  Clipboard,
+  Lightning,
+  NotePencil,
+  CheckCircle,
+} from "@phosphor-icons/react";
+import { SyncLoader } from "react-spinners";
 import ReactMarkdown from "react-markdown";
 
 interface DateItem {
@@ -32,7 +39,11 @@ export default function NotePage() {
   const qc = useQueryClient();
 
   // Fetch note
-  const { data: note, isLoading, isError } = useQuery({
+  const {
+    data: note,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ["note", id],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -43,7 +54,7 @@ export default function NotePage() {
       if (error) throw error;
       return data;
     },
-    enabled: !!id
+    enabled: !!id,
   });
 
   // Local state
@@ -72,7 +83,7 @@ export default function NotePage() {
         .eq("id", id);
       if (error) throw error;
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["notes", "note", id] })
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["notes", "note", id] }),
   });
   const deleteNote = useMutation({
     mutationFn: async () => {
@@ -82,7 +93,7 @@ export default function NotePage() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["notes"] });
       router.push("/main/dashboard");
-    }
+    },
   });
 
   // Summarize
@@ -124,9 +135,9 @@ export default function NotePage() {
   };
 
   const [isCopied, setIsCopied] = useState(false);
-  
+
   // ...existing code...
-  
+
   const handleCopy = () => {
     navigator.clipboard.writeText(summary || "");
     setIsCopied(true);
@@ -142,111 +153,153 @@ export default function NotePage() {
     <div className="p-6 h-fit flex gap-5 overflow-auto pb-10">
       {/* Edit Area */}
       <div className="">
-      <div className="space-y-4">
-        <input
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Note Title"
-          className="border-none shadow-none focus-visible:ring-0 focus-visible:border-none text-3xl font-semibold w-full px-2"
-        />
-        <div className="">
-        {summary ? (
-          <div className="max-w-xl">
-          <div className="bg-neutral-50 p-4 rounded-lg space-y-4">
-            <h1 className="flex items-center gap-2"><Lightning weight="duotone" className="text-yellow-600" />AI Summary</h1>
-            <p className="font-light">{summary}</p>
-              {dates.length > 0 && (
-                <>
-                  <h4 className="font-semibold flex gap-2 items-center pt-2"><CalendarDots weight="duotone" size={20} /> Timeline</h4>
-                  <ul className="list-disc pl-5">
-                    {dates.map((d, i) => (
-                      <li className="font-light" key={i}>
-                        {d.date}: {d.label}
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              )}
+        <div className="space-y-4">
+          <input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Note Title"
+            className="border-none shadow-none focus-visible:ring-0 focus-visible:border-none text-3xl font-semibold w-full px-2"
+          />
+          <div className="">
+            {summary ? (
+              <div className="max-w-xl">
+                <div className="bg-neutral-50 p-4 rounded-lg space-y-4">
+                  <h1 className="flex items-center gap-2">
+                    <Lightning weight="duotone" className="text-yellow-600" />
+                    AI Summary
+                  </h1>
+                  <p className="font-light">{summary}</p>
+                  {dates.length > 0 && (
+                    <>
+                      <h4 className="font-semibold flex gap-2 items-center pt-2">
+                        <CalendarDots weight="duotone" size={20} /> Timeline
+                      </h4>
+                      <ul className="list-disc pl-5">
+                        {dates.map((d, i) => (
+                          <li className="font-light" key={i}>
+                            {d.date}: {d.label}
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
 
-              {actions.length > 0 && (
-                <>
-                  <h4 className="font-semibold flex items-center gap-2"><NotePencil weight="duotone" size={20} /> Next Steps</h4>
-                  <ul className="list-disc pl-5">
-                    {actions.map((a, i) => (
-                      <li className="font-light" key={i}>{a}</li>
-                    ))}
-                  </ul>
-                </>
-              )}
+                  {actions.length > 0 && (
+                    <>
+                      <h4 className="font-semibold flex items-center gap-2">
+                        <NotePencil weight="duotone" size={20} /> Next Steps
+                      </h4>
+                      <ul className="list-disc pl-5">
+                        {actions.map((a, i) => (
+                          <li className="font-light" key={i}>
+                            {a}
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
 
-              {tags.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  {tags.map((t, i) => (
-                    <Badge key={i}>{t}</Badge>
-                  ))}
+                  {tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {tags.map((t, i) => (
+                        <Badge key={i}>{t}</Badge>
+                      ))}
+                    </div>
+                  )}
+
+                  {sentiment && (
+                    <div>
+                      <h4 className="font-semibold">Priority</h4>
+                      <Badge
+                        variant={
+                          sentiment === "urgent" ? "destructive" : "secondary"
+                        }
+                      >
+                        {sentiment.charAt(0).toUpperCase() + sentiment.slice(1)}
+                      </Badge>
+                    </div>
+                  )}
                 </div>
-              )}
-
-              {sentiment && (
-                <div>
-                  <h4 className="font-semibold">Priority</h4>
-                  <Badge variant={sentiment === "urgent" ? "destructive" : "secondary"}>
-                    {sentiment.charAt(0).toUpperCase() + sentiment.slice(1)}
-                  </Badge>
+                <div className="pt-4 flex gap-0 items-center">
+                  <button
+                    onClick={handleSummarize}
+                    className=" flex gap-2 items-center px-5 py-2 bg-primary rounded-lg text-xs"
+                  >
+                    <ArrowClockwise
+                      size={14}
+                      weight="bold"
+                      className="text-black"
+                    />
+                    Generate Again
+                  </button>
+                  <button
+                    className="ml-2 flex gap-2 items-center p-2 bg-primary rounded-lg text-xs"
+                    onClick={handleCopy}
+                  >
+                    {isCopied ? (
+                      <CheckCircle
+                        size={16}
+                        weight="duotone"
+                        className="text-black"
+                      />
+                    ) : (
+                      <Clipboard
+                        size={16}
+                        weight="duotone"
+                        className="text-black"
+                      />
+                    )}
+                  </button>
                 </div>
-              )}
-          </div>
-          <div className="pt-4 flex gap-0 items-center">
-            <button onClick={handleSummarize} className=" flex gap-2 items-center px-5 py-2 bg-primary rounded-lg text-xs">
-              <ArrowClockwise size={14} weight="bold" className="text-black" />
-              Generate Again
-            </button>
-<button 
-      className="ml-2 flex gap-2 items-center p-2 bg-primary rounded-lg text-xs" 
-      onClick={handleCopy}
-    >
-      {isCopied ? (
-        <CheckCircle size={16} weight="duotone" className="text-black" />
-      ) : (
-        <Clipboard size={16} weight="duotone" className="text-black" />
-      )}
-    </button>
-          </div>
-          </div>
-        ) : (
-          <Button variant={"default"} onClick={handleSummarize} className="bg-neutral-50 hover:bg-primary/50 text-black p-7">
-                <Lightning size={20} weight="duotone" className="text-yellow-600" />
+              </div>
+            ) : (
+              <Button
+                variant={"default"}
+                onClick={handleSummarize}
+                className="bg-neutral-50 hover:bg-primary/50 text-black p-7"
+              >
+                <Lightning
+                  size={20}
+                  weight="duotone"
+                  className="text-yellow-600"
+                />
                 <p className="">
-                {!summarizing ? "Generate AI Summary": "Generating AI Summary"}
+                  {!summarizing
+                    ? "Generate AI Summary"
+                    : "Generating AI Summary"}
                 </p>
                 {summarizing && <SyncLoader className="ml-2" size={5} />}
-          </Button>
-        )}
-      </div>
-        <Textarea
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="Write your note here…"
-          rows={6}
-          className="border-none shadow-none focus-visible:ring-0 focus-visible:border-none !w-full !text-lg !font-light"
-        />
-        {/* <ReactMarkdown>{content}</ReactMarkdown> */}
-        {/* <MDEditor value={content} onChange={(val) => setContent(val || "")} className="prose dark:prose-invert w-screen bg-yellow-500" /> */}
-      </div>
+              </Button>
+            )}
+          </div>
+          <Textarea
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            placeholder="Write your note here…"
+            rows={6}
+            className="border-none shadow-none focus-visible:ring-0 focus-visible:border-none !w-full !text-lg !font-light"
+          />
+          {/* <ReactMarkdown>{content}</ReactMarkdown> */}
+          {/* <MDEditor value={content} onChange={(val) => setContent(val || "")} className="prose dark:prose-invert w-screen bg-yellow-500" /> */}
+        </div>
 
-      <div className="flex space-x-2 mt-4">
-        <Button onClick={() => updateNote.mutate()} disabled={updateNote.isPending}>
-          {updateNote.isPending ? "Saving…" : "Save"}
-        </Button>
-        <Button variant="destructive" onClick={() => deleteNote.mutate()}>
-          Delete
-        </Button>
-        {/* <Button variant="secondary" onClick={handleSummarize} disabled={summarizing}>
+        <div className="flex space-x-2 mt-4">
+          <Button
+            onClick={() => updateNote.mutate()}
+            disabled={updateNote.isPending}
+          >
+            {updateNote.isPending ? "Saving…" : "Save"}
+          </Button>
+          <Button variant="destructive" onClick={() => deleteNote.mutate()}>
+            Delete
+          </Button>
+          {/* <Button variant="secondary" onClick={handleSummarize} disabled={summarizing}>
           {summarizing ? "Summarizing…" : "Summarize"}
         </Button> */}
-      </div>
+        </div>
       </div>
       {/* Summary & Details (scrollable) */}
     </div>
   );
 }
+

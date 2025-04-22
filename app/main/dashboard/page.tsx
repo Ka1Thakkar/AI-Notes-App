@@ -115,18 +115,17 @@ export default function DashboardPage() {
         .order("created_at", { ascending: false });
       if (search.trim()) {
         qb = qb.or(
-          `title.ilike.%${search.trim()}%,content.ilike.%${search.trim()}%`
+          `title.ilike.%${search.trim()}%,content.ilike.%${search.trim()}%`,
         );
       }
       const { data, error } = await qb;
       if (error) throw error;
       return data;
     },
-    placeholderData: (prev) => prev
+    placeholderData: (prev) => prev,
   });
 
-  if (isError)
-    return <p className="p-4 text-red-500">Failed to load notes.</p>;
+  if (isError) return <p className="p-4 text-red-500">Failed to load notes.</p>;
 
   return (
     <div className="flex flex-col h-screen overflow-auto p-6 text-foreground">
@@ -136,7 +135,7 @@ export default function DashboardPage() {
           <h2 className="lg:text-5xl text-4xl font-semibold">
             {/* Ready to distill your ideas, {user.user_metadata.first_name}? */}
             Welcome back, {user.user_metadata.first_name}!
-            <br/>
+            <br />
             <span className="lg:text-3xl text-2xl font-light">
               Let's quill some clarity.
             </span>
@@ -149,11 +148,7 @@ export default function DashboardPage() {
       <div className="mb-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-center gap-2 w-full md:w-auto">
           <div className="flex items-center bg-background rounded-full px-3">
-            <MagnifyingGlass
-              size={20}
-              weight="bold"
-              className="text-accent"
-            />
+            <MagnifyingGlass size={20} weight="bold" className="text-accent" />
             <Input
               placeholder="Search notes..."
               value={search}
@@ -308,3 +303,4 @@ export default function DashboardPage() {
     </div>
   );
 }
+

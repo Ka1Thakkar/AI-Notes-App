@@ -1,11 +1,11 @@
-import Link from "next/link"
-import Image from "next/image"
-import { Button } from "@/components/ui/button"
-import { Navbar } from "@/components/Navbar"
-import { Features } from "@/components/features"
-import { About } from "@/components/about"
-import { Testimonials } from "@/components/testimonials"
-import { Footer } from "@/components/footer"
+import Link from "next/link";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Navbar } from "@/components/Navbar";
+import { Features } from "@/components/features";
+import { About } from "@/components/about";
+import { Testimonials } from "@/components/testimonials";
+import { Footer } from "@/components/footer";
 
 export default function LandingPage() {
   return (
@@ -19,13 +19,18 @@ export default function LandingPage() {
               Capture ideas and organize your thoughts with SageQuill
             </h1>
             <p className="mt-6 lg:text-lg leading-8 text-neutral-800 font-light dark:text-gray-300 max-w-2xl text-center">
-              SageQuill helps you create, organize, and summarize your notes with the power of artificial intelligence.
+              SageQuill helps you create, organize, and summarize your notes
+              with the power of artificial intelligence.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Button size="lg" className="rounded-full px-8">
                 <Link href="/signup">Get Started</Link>
               </Button>
-              <Button variant="outline" size="lg" className="rounded-full px-8 hover:bg-secondary/75">
+              <Button
+                variant="outline"
+                size="lg"
+                className="rounded-full px-8 hover:bg-secondary/75"
+              >
                 <Link href="/login">Sign In</Link>
               </Button>
             </div>
@@ -60,5 +65,6 @@ export default function LandingPage() {
       {/* Footer */}
       <Footer />
     </div>
-  )
+  );
 }
+
