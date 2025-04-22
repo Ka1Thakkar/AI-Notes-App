@@ -1,5 +1,5 @@
 "use client";
-import { Sparkle, MagnifyingGlass, Moon, DeviceMobileCamera, Shield, Share2 } from "@phosphor-icons/react"
+import { Sparkle, MagnifyingGlass, Moon, DeviceMobileCamera, Shield,} from "@phosphor-icons/react"
 
 export function Features() {
   const features = [
