@@ -4,6 +4,7 @@
 import { useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { signup } from "./actions";
+import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,8 +17,10 @@ import {
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { GoogleLogo } from "@phosphor-icons/react";
 
 export default function SignupForm() {
+  const supabase = createClient();
   const searchParams = useSearchParams();
   const errorFromUrl = searchParams.get("error");
   const router = useRouter();
@@ -29,6 +32,19 @@ export default function SignupForm() {
   const [password, setPassword]  = useState("");
   const [error, setError]        = useState<string | null>(errorFromUrl);
   const [isLoading, setIsLoading]= useState(false);
+
+  const handleGoogleAuth = async () => {
+    setIsLoading(true);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        // adjust this to where you want users to land post-login
+        redirectTo: `${window.location.origin}/main/dashboard`,
+      },
+    });
+    if (error) setError(error.message);
+    setIsLoading(false);
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[var(--background)] text-[var(--foreground)] px-4">
@@ -58,6 +74,7 @@ export default function SignupForm() {
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 required
+                className="focus-visible:ring-0"
               />
             </div>
 
@@ -71,6 +88,7 @@ export default function SignupForm() {
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 required
+                className="focus-visible:ring-0"
               />
             </div>
 
@@ -85,6 +103,7 @@ export default function SignupForm() {
                 onChange={(e) => setAge(e.target.value)}
                 required
                 min={1}
+                className="focus-visible:ring-0"
               />
             </div>
 
@@ -98,6 +117,7 @@ export default function SignupForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                className="focus-visible:ring-0"
               />
             </div>
 
@@ -110,6 +130,7 @@ export default function SignupForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                className="focus-visible:ring-0"
               />
             </div>
 
@@ -117,6 +138,23 @@ export default function SignupForm() {
               {isLoading ? "Signing up…" : "Sign up"}
             </Button>
           </form>
+
+          {/* Divider */}
+          <div className="relative my-4 text-center text-sm text-muted-foreground">
+            <span className="bg-[var(--background)] px-2">or</span>
+            <hr className="absolute inset-0 top-1/2 border-t border-[var(--border)]" />
+          </div>
+
+          {/* Google OAuth */}
+          <Button
+            variant="default"
+            className="w-full flex items-center justify-center bg-primary/25 hover:bg-primary/50"
+            onClick={handleGoogleAuth}
+            disabled={isLoading}
+          >
+            <GoogleLogo weight="duotone" size={20} />
+            {isLoading ? "Redirecting…" : "Continue with Google"}
+          </Button>
         </CardContent>
         <CardFooter className="text-center">
           <p className="text-sm text-[var(--muted-foreground)]">

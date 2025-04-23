@@ -134,7 +134,7 @@ export default function DashboardPage() {
         <div className="mb-6">
           <h2 className="lg:text-5xl text-4xl font-semibold">
             {/* Ready to distill your ideas, {user.user_metadata.first_name}? */}
-            Welcome back, {user.user_metadata.first_name}!
+            Welcome back, {user.user_metadata.name.split(" ")[0]}!
             <br />
             <span className="lg:text-3xl text-2xl font-light">
               Let's quill some clarity.
