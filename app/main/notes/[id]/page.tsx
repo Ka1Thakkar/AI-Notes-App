@@ -149,16 +149,24 @@ export default function NotePage() {
   if (isError) return <p className="p-4 text-red-500">Error loading note.</p>;
 
   return (
-    <div className="p-6 h-screen flex gap-5 overflow-auto pb-10">
+    <div className="p-6 h-screen flex flex-col gap-5 overflow-auto">
       {/* Edit Area */}
-      <div className="h-full overflow-auto">
+      <input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Note Title"
+            className="border-none shadow-none focus-visible:ring-0 focus-visible:border-none text-3xl font-semibold w-full px-2"
+          />
+      <div className="h-full overflow-auto relative">
         <div className="space-y-4">
+          {/* <div className="">
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Note Title"
             className="border-none shadow-none focus-visible:ring-0 focus-visible:border-none text-3xl font-semibold w-full px-2"
           />
+          </div> */}
           <div className="">
             {summary ? (
               <div className="max-w-xl">
@@ -279,8 +287,9 @@ export default function NotePage() {
             className="border-none shadow-none focus-visible:ring-0 focus-visible:border-none !w-full !text-lg !font-light"
           />
         </div>
-
-        <div className="flex space-x-2 mt-4">
+      </div>
+      {/* Summary & Details (scrollable) */}
+      <div className="flex space-x-2">
           <Button
             onClick={() => updateNote.mutate()}
             disabled={updateNote.isPending}
@@ -294,8 +303,6 @@ export default function NotePage() {
           {summarizing ? "Summarizing…" : "Summarize"}
         </Button> */}
         </div>
-      </div>
-      {/* Summary & Details (scrollable) */}
     </div>
   );
 }
