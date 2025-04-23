@@ -289,7 +289,7 @@ export default function NotePage() {
         </div>
       </div>
       {/* Summary & Details (scrollable) */}
-      <div className="flex space-x-2">
+      <div className="flex gap-2 pb-12 lg:pb-0">
           <Button
             onClick={() => updateNote.mutate()}
             disabled={updateNote.isPending}
