@@ -1,4 +1,5 @@
 // app/layout.tsx
+import LenisProvider from "@/components/LenisProvider";
 import "./globals.css";
 import {Lexend} from 'next/font/google';
 
@@ -19,6 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={lexend.className}>
+        <LenisProvider />
         {/* No AppLayout here—public pages render full width */}
         {children}
       </body>
