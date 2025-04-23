@@ -2,6 +2,7 @@
 import LenisProvider from "@/components/LenisProvider";
 import "./globals.css";
 import {Lexend} from 'next/font/google';
+import { cn } from "@/lib/utils";
 
 const lexend = Lexend({
   weight: ['400', '500', '600', '700', '100', '200', '300', '800', '900'],
@@ -19,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={lexend.className}>
+      <body className={cn(lexend.className, 'scroll-smooth')}>
         {/* <LenisProvider /> */}
         {/* No AppLayout here—public pages render full width */}
         {children}

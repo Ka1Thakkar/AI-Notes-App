@@ -149,7 +149,7 @@ export default function NotePage() {
   if (isError) return <p className="p-4 text-red-500">Error loading note.</p>;
 
   return (
-    <div className="p-6 h-fit flex gap-5 overflow-auto pb-10">
+    <div className="p-6 h-fit flex gap-5 overflow-auto pb-10 scroll-smooth">
       {/* Edit Area */}
       <div className="">
         <div className="space-y-4">

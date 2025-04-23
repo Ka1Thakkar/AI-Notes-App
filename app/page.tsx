@@ -9,7 +9,7 @@ import { Footer } from "@/components/footer";
 
 export default function LandingPage() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-background">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background scroll-smooth">
       <Navbar />
       {/* Hero Section */}
       <section className="relative overflow-hidden min-h-screen bg-linear-to-b from-primary/0 to-primary/75 via-primary/75 w-full">
