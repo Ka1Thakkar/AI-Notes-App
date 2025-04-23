@@ -202,12 +202,12 @@ export default function Sidebar() {
               >
                 <Input placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} required className="focus-visible:ring-0" />
                 <Textarea placeholder="Content" rows={4} value={content} onChange={(e) => setContent(e.target.value)} required className="focus-visible:ring-0 h-32" />
-              </form>
-              <DialogFooter className="flex justify-end px-2 py-2">
+                  <DialogFooter className="flex justify-end px-2 py-2">
                 <Button type="submit" disabled={createNote.isPending}>
                   {createNote.isPending ? "Saving…" : "Save Note"}
                 </Button>
               </DialogFooter>
+              </form>
             </DialogContent>
           </Dialog>
         ) : (
@@ -232,12 +232,12 @@ export default function Sidebar() {
               >
                 <Input placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} required className="focus-visible:ring-0" />
                 <Textarea placeholder="Content" rows={6} value={content} onChange={(e) => setContent(e.target.value)} required className="h-32 focus-visible:ring-0" />
-              </form>
-              <SheetFooter className="flex justify-end px-4 py-2">
+                  <SheetFooter className="flex justify-end px-4 py-2">
                 <Button type="submit" disabled={createNote.isPending}>
                   {createNote.isPending ? "Saving…" : "Save Note"}
                 </Button>
               </SheetFooter>
+              </form>
             </SheetContent>
           </Sheet>
         )}
