@@ -27,7 +27,7 @@ export function Testimonials() {
   ]
 
   return (
-    <section id="testimonials" className="py-24 bg-linear-to-b from-primary/50 to-primary/0 via-primary/25 min-h-screen w-full flex items-center justify-center">
+    <section id="testimonials" className="lg:py-24 py-12 bg-linear-to-b from-primary/50 to-primary/0 via-primary/25 lg:min-h-screen w-full flex items-center justify-center">
       <div className="container px-4 md:px-6">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">

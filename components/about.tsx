@@ -4,7 +4,7 @@ import {Check, CheckCircle} from '@phosphor-icons/react'
 
 export function About() {
   return (
-    <section id="about" className="py-24 bg-primary/75 dark:bg-gray-900 w-full flex items-center justify-center min-h-screen">
+    <section id="about" className="lg:py-24 py-12 bg-primary/75 dark:bg-gray-900 w-full flex items-center justify-center lg:min-h-screen">
       <div className="container px-4 md:px-6 w-full">
         <div className="flex flex-col justify-center lg:flex-row gap-10  lg:gap-16 items-center">
           <div className="max-w-5xl">
