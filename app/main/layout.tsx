@@ -1,4 +1,5 @@
 // app/layout.tsx
+import LenisProvider from "@/components/LenisProvider"
 import "../globals.css"
 import {Providers} from "./providers"
 import AppLayout from "@/components/AppLayout"
@@ -22,7 +23,10 @@ export default function RootLayout({
   return (
       <section className={`${lexend.className} bg-primary/20 text-foreground antialiased`}>
         <Providers>
-          <AppLayout>{children}</AppLayout>
+          <AppLayout>
+            <LenisProvider />
+            {children}
+          </AppLayout>
         </Providers>
       </section>
   )
