@@ -35,7 +35,7 @@ export default function LandingPage() {
               </Button>
             </div>
           </div>
-          <div className="mt-16 sm:mt-24 lg:mt-20 lg:flex lg:flex-col items-center justify-center aspect-[9:16] lg:aspect-auto">
+          <div className="mt-16 sm:mt-24 lg:mt-20 lg:flex lg:flex-col items-center justify-center aspect-[9/16] lg:aspect-auto">
             <div className="relative">
               <Image
                 src="/product.png"
