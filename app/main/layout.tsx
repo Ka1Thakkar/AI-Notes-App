@@ -24,7 +24,7 @@ export default function RootLayout({
       <section className={`${lexend.className} bg-primary/20 text-foreground antialiased`}>
         <Providers>
           <AppLayout>
-            <LenisProvider />
+            {/* <LenisProvider /> */}
             {children}
           </AppLayout>
         </Providers>
