@@ -20,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={cn(lexend.className, 'scroll-smooth')}>
+      <body className={lexend.className}>
         {/* <LenisProvider /> */}
         {/* No AppLayout here—public pages render full width */}
         {children}

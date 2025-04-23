@@ -128,7 +128,7 @@ export default function DashboardPage() {
   if (isError) return <p className="p-4 text-red-500">Failed to load notes.</p>;
 
   return (
-    <div className="flex flex-col h-screen overflow-auto p-6 text-foreground scroll-smooth">
+    <div className="flex flex-col h-screen overflow-auto p-6 text-foreground">
       {/* Greeting */}
       {user && (
         <div className="mb-6">
