@@ -169,8 +169,10 @@ export default function Sidebar() {
                     : "hover:bg-primary/15"
                 )}
               >
-                <Note weight="duotone" size={28} />
+                <Note weight="duotone" size={!collapsed ? 20 :28} className="min-w-max" />
+                <p className="truncate">
                 {!collapsed && note.title}
+                </p>
               </div>
             </Link>
           );
@@ -183,55 +185,42 @@ export default function Sidebar() {
         {isMobile ? (
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <Button variant="default" className={cn(collapsed && "aspect-square","w-full bg-primary/25 hover:bg-primary/50 border-2 border-primary/25 flex items-center justify-center")}>
-                <Plus size={12} />
+              <Button variant="outline" size="sm" className="w-full flex items-center justify-center">
+                <Plus className="mr-2 h-4 w-4" />
                 {!collapsed && "New Note"}
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-sm w-11/12">
+            <DialogContent className="max-w-sm w-11/12 flex flex-col">
               <DialogHeader>
                 <DialogTitle>New Note</DialogTitle>
-                <DialogDescription>
-                  Enter title & content, then save.
-                </DialogDescription>
+                <DialogDescription>Enter title & content, then save.</DialogDescription>
               </DialogHeader>
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
                   createNote.mutate();
                 }}
-                className="space-y-4 mt-4"
+                className="flex-1 overflow-auto space-y-4 mt-4 px-2"
               >
-                <Input
-                  placeholder="Title"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  required
-                />
-                <Textarea
-                  placeholder="Content"
-                  rows={4}
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  required
-                />
-                <DialogFooter className="flex justify-end">
-                  <Button type="submit" disabled={createNote.isPending}>
-                    {createNote.isPending ? "Saving…" : "Save Note"}
-                  </Button>
-                </DialogFooter>
+                <Input placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} required className="focus-visible:ring-0" />
+                <Textarea placeholder="Content" rows={4} value={content} onChange={(e) => setContent(e.target.value)} required className="focus-visible:ring-0 h-32" />
+                  <DialogFooter className="flex justify-end px-2 py-2">
+                <Button type="submit" disabled={createNote.isPending}>
+                  {createNote.isPending ? "Saving…" : "Save Note"}
+                </Button>
+              </DialogFooter>
               </form>
             </DialogContent>
           </Dialog>
         ) : (
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
-              <Button variant="default" className={cn("w-full bg-primary/25 hover:bg-primary/50 border-2 border-primary/25 flex items-center justify-center", collapsed && "aspect-square")}>
-                <Plus size={12} />
-                {!collapsed && "New Note"}
+              <Button variant="default" size="sm" className="w-full flex items-center justify-center bg-primary/25 hover:bg-primary/50 border-1 border-primary/25">
+                <Plus size={20} />
+                {!collapsed && <span className="ml-2">New Note</span>}
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="max-h-full w-64">
+            <SheetContent side="right" className="max-h-full w-full flex flex-col">
               <SheetHeader>
                 <SheetTitle>New Note</SheetTitle>
                 <SheetDescription>Enter title & content.</SheetDescription>
@@ -241,31 +230,20 @@ export default function Sidebar() {
                   e.preventDefault();
                   createNote.mutate();
                 }}
-                className="space-y-4 px-4 py-2"
+                className="overflow-auto space-y-4 px-4"
               >
-                <Input
-                  placeholder="Title"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  required
-                />
-                <Textarea
-                  placeholder="Content"
-                  rows={6}
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  required
-                />
-                <SheetFooter className="flex justify-end">
-                  <Button type="submit" disabled={createNote.isPending}>
-                    {createNote.isPending ? "Saving…" : "Save Note"}
-                  </Button>
-                </SheetFooter>
+                <Input placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} required className="focus-visible:ring-0" />
+                <Textarea placeholder="Content" rows={6} value={content} onChange={(e) => setContent(e.target.value)} required className="h-32 focus-visible:ring-0" />
+                  <SheetFooter className="flex justify-end px-4 py-2">
+                <Button type="submit" disabled={createNote.isPending}>
+                  {createNote.isPending ? "Saving…" : "Save Note"}
+                </Button>
+              </SheetFooter>
               </form>
             </SheetContent>
           </Sheet>
         )}
-          <div className={cn("mt-2 flex items-center gap-2 rounded-lg", !collapsed && "p-2 border-1 border-neutral-300")}>
+          <div className={cn("mt-2 flex items-center gap-2 rounded-lg", !collapsed && "p-2 border-1 border-primary/25 bg-primary/10")}>
             {avatarUrl ? (
               <Image
                 src={avatarUrl}

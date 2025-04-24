@@ -34,15 +34,19 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import { MagnifyingGlass, Trash } from "@phosphor-icons/react";
+import { Funnel, Lightning, MagnifyingGlass, Trash } from "@phosphor-icons/react";
 import { MoreHorizontal, Plus } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 interface Note {
   id: string;
   title: string;
   content: string;
   created_at: string;
+  summary: string;
+  sentiment?: string;
 }
 
 export default function DashboardPage() {
@@ -119,34 +123,34 @@ export default function DashboardPage() {
     },
   });
 
+  const [sentimentFilter, setSentimentFilter] = useState<"all" | Note["sentiment"]>(
+    "all"
+  );
+
   // Search + notes query
   const [search, setSearch] = useState("");
   const {
     data: notes = [],
     isError,
   } = useQuery<Note[]>({
-    queryKey: ["notes", search],
+    queryKey: ["notes", search, sentimentFilter],
     queryFn: async () => {
-      let qb = supabase
-        .from("notes")
-        .select("id, title, content, created_at")
-        .order("created_at", { ascending: false });
-      if (search.trim()) {
-        qb = qb.or(
-          `title.ilike.%${search.trim()}%,content.ilike.%${search.trim()}%`
-        );
-      }
-      const { data, error } = await qb;
+      const { data, error } = await supabase
+        .rpc("search_notes", { term: search.trim() }).order("created_at", { ascending: false });
       if (error) throw error;
       return data;
     },
     placeholderData: (prev) => prev,
   });
 
+  const displayed = notes.filter((n) =>
+    sentimentFilter === "all" ? true : n.sentiment === sentimentFilter
+  );
+
   if (isError) return <p className="p-4 text-red-500">Failed to load notes.</p>;
 
   return (
-    <div className="flex flex-col h-screen overflow-auto p-6 text-[var(--foreground)]">
+    <div className="flex flex-col h-screen overflow-auto p-6 text-[var(--foreground)] pb-24">
       {/* Greeting */}
       {(greetingTitle || greetingSubtitle) && (
         <div className="mb-6 space-y-2">
@@ -161,8 +165,7 @@ export default function DashboardPage() {
 
       {/* Search + New Note */}
       <div className="mb-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div className="flex items-center gap-2 w-full md:w-auto">
-          <div className="flex items-center bg-[var(--background)] rounded-full px-3">
+          <div className="flex items-center w-full md:max-w-xs bg-[var(--background)] rounded-full px-3">
             <MagnifyingGlass
               size={20}
               weight="bold"
@@ -175,9 +178,31 @@ export default function DashboardPage() {
               className="bg-transparent shadow-none focus-visible:ring-0 focus-visible:border-0 w-full"
             />
           </div>
-        </div>
+        <div className="flex justify-between w-full md:w-auto items-center gap-2">
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="default" size="sm" className="px-2">
+                <Funnel weight="duotone" size={16} />
+                {sentimentFilter !== "all" && (
+                  <span className="ml-1 capitalize">{sentimentFilter}</span>
+                )}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-background space-y-1" side="bottom" align={isMobile ? "start" : "end"}>
+              {(["all", "urgent", "neutral", "positive"] as const).map((s) => (
+                <DropdownMenuItem
+                  key={s}
+                  variant="default"
+                  onSelect={() => setSentimentFilter(s)}
+                  className={cn(s === sentimentFilter && "font-medium bg-primary/25 hover:bg-primary/50", "hover:bg-primary/50")}
+                >
+                  {s.charAt(0).toUpperCase() + s.slice(1)}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-        {isMobile ? (
+        {isMobile && (
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <Button variant="default" size="sm">
@@ -221,57 +246,60 @@ export default function DashboardPage() {
               </form>
             </DialogContent>
           </Dialog>
-        ) : (
-          <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger asChild>
-              <Button variant="default" size="sm">
-                <Plus className="mr-2 h-4 w-4" /> New Note
-              </Button>
-            </SheetTrigger>
-            <SheetContent
-              side="right"
-              className="h-full w-11/12 md:w-1/3 flex flex-col"
-            >
-              <SheetHeader>
-                <SheetTitle>New Note</SheetTitle>
-                <SheetDescription>Enter title & content.</SheetDescription>
-              </SheetHeader>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  createNote.mutate();
-                }}
-                className="flex flex-col flex-1 overflow-auto space-y-4 mt-4 px-4"
-              >
-                <Input
-                  placeholder="Title"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  required
-                  className="focus-visible:ring-0"
-                />
-                <Textarea
-                  placeholder="Content"
-                  rows={6}
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  required
-                  className="h-32 focus-visible:ring-0"
-                />
-                <SheetFooter className="flex justify-end">
-                  <Button type="submit" disabled={createNote.isPending}>
-                    {createNote.isPending ? "Saving…" : "Save Note"}
-                  </Button>
-                </SheetFooter>
-              </form>
-            </SheetContent>
-          </Sheet>
-        )}
+        )
+        // ) : (
+        //   <Sheet open={open} onOpenChange={setOpen}>
+        //     <SheetTrigger asChild>
+        //       <Button variant="default" size="sm">
+        //         <Plus className="mr-2 h-4 w-4" /> New Note
+        //       </Button>
+        //     </SheetTrigger>
+        //     <SheetContent
+        //       side="right"
+        //       className="h-full w-11/12 md:w-1/3 flex flex-col"
+        //     >
+        //       <SheetHeader>
+        //         <SheetTitle>New Note</SheetTitle>
+        //         <SheetDescription>Enter title & content.</SheetDescription>
+        //       </SheetHeader>
+        //       <form
+        //         onSubmit={(e) => {
+        //           e.preventDefault();
+        //           createNote.mutate();
+        //         }}
+        //         className="flex flex-col flex-1 overflow-auto space-y-4 mt-4 px-4"
+        //       >
+        //         <Input
+        //           placeholder="Title"
+        //           value={title}
+        //           onChange={(e) => setTitle(e.target.value)}
+        //           required
+        //           className="focus-visible:ring-0"
+        //         />
+        //         <Textarea
+        //           placeholder="Content"
+        //           rows={6}
+        //           value={content}
+        //           onChange={(e) => setContent(e.target.value)}
+        //           required
+        //           className="h-32 focus-visible:ring-0"
+        //         />
+        //         <SheetFooter className="flex justify-end">
+        //           <Button type="submit" disabled={createNote.isPending}>
+        //             {createNote.isPending ? "Saving…" : "Save Note"}
+        //           </Button>
+        //         </SheetFooter>
+        //       </form>
+        //     </SheetContent>
+        //   </Sheet>
+        // )}
+        }
+      </div>
       </div>
 
       {/* Notes Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {notes.map((note) => (
+        {displayed.map((note) => (
           <div key={note.id} className="relative">
             <Link href={`/main/notes/${note.id}`} className="h-full">
               <Card className="cursor-pointer h-full p-5 bg-[var(--card)] text-[var(--card-foreground)] flex flex-col justify-between">
@@ -310,9 +338,31 @@ export default function DashboardPage() {
                     {note.content}
                   </p>
                 </div>
-                <p className="text-xs text-[var(--muted-foreground)]">
-                  {new Date(note.created_at).toLocaleDateString()}
-                </p>
+                <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <p className="text-xs text-[var(--muted-foreground)]">
+                    {new Date(note.created_at).toLocaleDateString("en-GB", {
+                      day : "numeric",
+                      month : "short",
+                      year : "numeric",
+                    })}
+                  </p>
+                  <div>
+                    {note.summary && 
+                      <div className="text-xs font-light flex items-center gap-1">
+                        <Lightning size={12} className="text-yellow-600" weight="duotone" />
+                        {/* Summary Generated */}
+                      </div>
+                    }
+                  </div>
+                </div>
+                {note.sentiment && <Badge
+                  variant={note.sentiment === "urgent" ? "destructive" : "secondary"}
+                >
+                  {note.sentiment.charAt(0).toUpperCase() + note.sentiment.slice(1)}
+                </Badge>
+                }
+                </div>
               </Card>
             </Link>
           </div>

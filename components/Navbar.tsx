@@ -46,7 +46,7 @@ export function Navbar() {
 
         <div className="hidden items-center gap-4 md:flex">
           {/* <ModeToggle /> */}
-          <Button variant="default" className="bg-secondary/50" size="sm">
+          <Button variant="default" className="bg-secondary/50 hover:bg-secondary/75" size="sm">
             <Link href="/login">Sign in</Link>
           </Button>
           <Button size="sm">

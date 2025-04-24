@@ -11,6 +11,7 @@ const lexend = Lexend({
 
 export const metadata = {
   title: "SageQuill",
+  description: "AI-powered Note Taking App"
 };
 
 export default function RootLayout({

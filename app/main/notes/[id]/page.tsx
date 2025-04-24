@@ -17,8 +17,10 @@ import {
   NotePencil,
   CheckCircle,
   Trash,
+  CheckFat,
+  FloppyDisk,
 } from "@phosphor-icons/react";
-import { SyncLoader } from "react-spinners";
+import { BounceLoader, SyncLoader } from "react-spinners";
 import { cn } from "@/lib/utils";
 import useIsMobile from "@/hooks/useIsMobile";
 
@@ -167,7 +169,7 @@ export default function NotePage() {
     setTimeout(() => setIsCopied(false), 2000);
   };
 
-  if (isLoading) return <p className="p-4">Loading note…</p>;
+  if (isLoading) return <div className="p-4 w-full h-full flex items-center justify-center"><BounceLoader color="#B2AC88" /></div>;
   if (isError)   return <p className="p-4 text-red-500">Error loading note.</p>;
 
   return (
@@ -200,7 +202,11 @@ export default function NotePage() {
                 <ul className="list-disc pl-5 font-light">
                   {dates.map((d, i) => (
                     <li key={i}>
-                      {d.date}: {d.label}
+                      {new Date(d.date).toLocaleDateString("en-GB", {
+                        day: "numeric",
+                        month: 'short',
+                        year: 'numeric',
+                      })}: {d.label}
                     </li>
                   ))}
                 </ul>
@@ -232,7 +238,7 @@ export default function NotePage() {
 
             {/* Sentiment */}
             {sentiment && (
-              <div>
+              <div className="space-y-2">
                 <h4 className="font-semibold">Priority</h4>
                 <Badge
                   variant={sentiment === "urgent" ? "destructive" : "secondary"}
@@ -255,9 +261,9 @@ export default function NotePage() {
                   weight="bold"
                   className="text-black"
                 />
-                {summarizeAndSave.isPending
+                {/* {summarizeAndSave.isPending
                   ? "Generating…"
-                  : "Generate Again"}
+                  : "Generate Again"} */}
               </Button>
 
               <Button
@@ -317,6 +323,8 @@ export default function NotePage() {
           onClick={() => updateNote.mutate()}
           disabled={updateNote.isPending}
         >
+          <FloppyDisk weight="duotone" />
+          {/* <CheckFat weight="duotone" /> */}
           {updateNote.isPending ? "Saving…" : "Save"}
         </Button>
         <Button variant="destructive" onClick={() => deleteNote.mutate()}>

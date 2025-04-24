@@ -27,9 +27,9 @@ export default function LandingPage() {
                 <Link href="/signup">Get Started</Link>
               </Button>
               <Button
-                variant="outline"
+                variant="default"
                 size="lg"
-                className="rounded-full px-8 hover:bg-secondary/75"
+                className="rounded-full px-8 bg-secondary/50 hover:bg-secondary/75"
               >
                 <Link href="/login">Sign In</Link>
               </Button>
