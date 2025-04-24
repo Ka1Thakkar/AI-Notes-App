@@ -1,10 +1,9 @@
 // app/login/page.tsx
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
-import { login } from "./actions";
 import Link from "next/link";
+import Image from "next/image";
 import LoginPageClient from "./LoginPageCLient";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardHeader,
@@ -12,10 +11,6 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
 import LoginForm from "./LoginForm";
 
 export default async function LoginPage() {
@@ -33,8 +28,9 @@ export default async function LoginPage() {
   // We read it client-side inside LoginPageClient if you wish to show it there.
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[var(--background)] px-4">
-      <Card className="w-full max-w-md">
+    <div className="flex min-h-screen items-center justify-center bg-[var(--background)] relative px-4">
+      <Image src="/Background.png" alt="Hero" fill className="object-cover w-fill h-full absolute top-0 left-0 opacity-60" />
+      <Card className="w-full max-w-md z-10">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">
             Sign in

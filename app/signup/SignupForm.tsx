@@ -19,6 +19,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { Eye, EyeSlash, GoogleLogo } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
+import useIsMobile from "@/hooks/useIsMobile";
 
 export default function SignupForm() {
   const supabase = createClient();
@@ -33,6 +35,7 @@ export default function SignupForm() {
   const [error, setError]        = useState<string | null>(errorFromUrl);
   const [isLoading, setIsLoading]= useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const isMobile = useIsMobile();
 
   const handleGoogleAuth = async () => {
     setIsLoading(true);
@@ -48,8 +51,9 @@ export default function SignupForm() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[var(--background)] text-[var(--foreground)] px-4">
-      <Card className="w-full max-w-md">
+    <div className="flex min-h-screen items-center justify-center bg-[var(--background)] text-[var(--foreground)] px-4 relative">
+      <Image src="/Background.png" alt="Hero" fill className="object-cover w-fill h-full absolute top-0 left-0 opacity-60" />
+      <Card className="w-full max-w-md z-10">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">Sign up</CardTitle>
         </CardHeader>
@@ -158,7 +162,7 @@ export default function SignupForm() {
 
           {/* Divider */}
           <div className="relative my-4 text-center text-sm text-muted-foreground">
-            <span className="bg-[var(--background)] px-2">or</span>
+            <span className="bg-white px-2">or</span>
             <hr className="absolute inset-0 top-1/2 border-t border-[var(--border)]" />
           </div>
 

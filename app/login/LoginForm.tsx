@@ -29,14 +29,22 @@ export default function LoginForm() {
       <div className="space-y-2">
         <Label htmlFor="password">Password</Label>
         <div className="flex gap-2 items-center">
-          <Input
+          {/* <Input
             id="password"
             name="password"
             type={showPassword ? "text" : "password"}
             placeholder="********"
             required
             className="focus-visible:ring-0 pr-10"
-          />
+          /> */}
+          <Input
+                id="password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                required
+                placeholder={!showPassword ? "********" : "Password"}
+                className="focus-visible:ring-0"
+              />
           <Button
             type="button"
             variant={"default"}
