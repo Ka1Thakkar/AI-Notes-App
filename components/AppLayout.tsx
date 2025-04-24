@@ -3,7 +3,7 @@
 
 import { ReactNode, useState } from "react"
 import { usePathname } from "next/navigation"
-import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
+import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { SidebarSimple } from "@phosphor-icons/react"
 import Sidebar from "./Sidebar"
 import useIsMobile from "@/hooks/useIsMobile"
@@ -34,7 +34,10 @@ export default function AppLayout({ children }: { children: ReactNode }) {
             </button>
           </SheetTrigger>
           <SheetContent side="left" className="w-full">
-            <Sidebar />
+            <SheetHeader className="hidden">
+              <SheetTitle />
+            </SheetHeader>
+            <Sidebar setSheetOpen={setOpen} sheetOpen={open} />
           </SheetContent>
         </Sheet>
       )}

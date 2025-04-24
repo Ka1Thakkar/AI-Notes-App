@@ -45,7 +45,12 @@ interface NoteListItem {
   title: string;
 }
 
-export default function Sidebar() {
+interface SidebarProps {
+  sheetOpen?: boolean;
+  setSheetOpen?: (open: boolean) => void;
+}
+
+export default function Sidebar({sheetOpen, setSheetOpen}: SidebarProps) {
   const supabase = createClient();
   const router = useRouter();
   const pathname = usePathname();
@@ -70,7 +75,7 @@ export default function Sidebar() {
       }
       const md = user.user_metadata as any;
       setUserName(
-        md.name || ""
+        md.name || md.first_name + " "
       );
       setEmail(md.email || "")
       setAvatarUrl(md.avatar_url || null);
@@ -161,9 +166,12 @@ export default function Sidebar() {
           const active = note.id === currentId;
           return (
             <Link key={note.id} href={`/main/notes/${note.id}`}>
-              <div
+              <button
+                onClick={() => {setSheetOpen && (
+                  setTimeout(() => setSheetOpen(false), 1500))
+                }}
                 className={cn(
-                  "flex items-center gap-2 px-4 py-2 truncate",
+                  "flex items-center gap-2 px-4 py-2 truncate w-full",
                   active
                     ? "bg-primary/10 font-medium"
                     : "hover:bg-primary/15"
@@ -173,7 +181,7 @@ export default function Sidebar() {
                 <p className="truncate">
                 {!collapsed && note.title}
                 </p>
-              </div>
+              </button>
             </Link>
           );
         })}
@@ -185,7 +193,7 @@ export default function Sidebar() {
         {isMobile ? (
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <Button variant="outline" size="sm" className="w-full flex items-center justify-center">
+              <Button variant="outline" size="sm" className="w-full flex items-center justify-center bg-primary/25 hover:bg-primary/50 border-1 border-primary/25">
                 <Plus className="mr-2 h-4 w-4" />
                 {!collapsed && "New Note"}
               </Button>
@@ -243,7 +251,7 @@ export default function Sidebar() {
             </SheetContent>
           </Sheet>
         )}
-          <div className={cn("mt-2 flex items-center gap-2 rounded-lg", !collapsed && "p-2 border-1 border-primary/25 bg-primary/10")}>
+          <div className={cn("mt-2 flex items-center gap-2 rounded-lg", !collapsed && "p-2 border-1 border-primary/25 bg-primary/25", collapsed && avatarUrl && "rounded-full", collapsed && !avatarUrl && "rounded-full bg-primary/25 border-1 border-primary/25 p-1 justify-center")}>
             {avatarUrl ? (
               <Image
                 src={avatarUrl}
@@ -253,24 +261,26 @@ export default function Sidebar() {
                 className="rounded-full w-[32px]"
               />
             ) : (
-              <UserIcon size={32} className="text-muted-foreground" />
+              <UserIcon weight="duotone" size={collapsed ? 20 : 28} className="text-black min-w-max" />
             )}
             {!collapsed &&
-            <div className="flex flex-col">
-            <span className="font-medium truncate text-sm">{userName}</span>
-            <span className="text-xs text-muted-foreground font-light">
-              {email}
-            </span>
+            <div className="flex flex-col w-full truncate">
+              <p className="font-medium truncate text-sm">
+                {userName}
+              </p>
+              <p className="text-xs text-muted-foreground font-light truncate">
+                {email}
+              </p>
             </div> }
           </div>
         {/* logout */}
         <Button
           variant="default"
           size="sm"
-          className={cn("w-full flex items-center justify-center gap-2", collapsed && "aspect-square")}
+          className={cn("w-full flex items-center justify-center gap-2 border-1 border-black/25", collapsed && "aspect-square")}
           onClick={handleLogout}
         >
-          <SignOut />
+          <SignOut weight="duotone" />
           {!collapsed && "Logout"}
         </Button>
       </div>

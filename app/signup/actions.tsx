@@ -11,12 +11,8 @@ export async function signup(formData: FormData) {
   // pull first name, last name, age, email & password
   const firstName = formData.get('firstName') as string
   const lastName  = formData.get('lastName')  as string
-  const ageValue  = formData.get('age')       as string
   const email     = formData.get('email')     as string
   const password  = formData.get('password')  as string
-
-  // parse age to number (optional)
-  const age = parseInt(ageValue, 10)
 
   // sign up with user_metadata including age
   const { data, error } = await supabase.auth.signUp({
@@ -26,7 +22,6 @@ export async function signup(formData: FormData) {
       data: {
         first_name: firstName,
         last_name:  lastName,
-        age: age,
       },
     }
   })

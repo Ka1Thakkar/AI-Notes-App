@@ -17,7 +17,8 @@ import {
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
-import { GoogleLogo } from "@phosphor-icons/react";
+import { Eye, EyeSlash, GoogleLogo } from "@phosphor-icons/react";
+import { cn } from "@/lib/utils";
 
 export default function SignupForm() {
   const supabase = createClient();
@@ -27,11 +28,11 @@ export default function SignupForm() {
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName]  = useState("");
-  const [age, setAge]            = useState("");
   const [email, setEmail]        = useState("");
   const [password, setPassword]  = useState("");
   const [error, setError]        = useState<string | null>(errorFromUrl);
   const [isLoading, setIsLoading]= useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleGoogleAuth = async () => {
     setIsLoading(true);
@@ -92,7 +93,7 @@ export default function SignupForm() {
               />
             </div>
 
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <Label htmlFor="age">Age</Label>
               <Input
                 id="age"
@@ -105,7 +106,7 @@ export default function SignupForm() {
                 min={1}
                 className="focus-visible:ring-0"
               />
-            </div>
+            </div> */}
 
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -123,15 +124,31 @@ export default function SignupForm() {
 
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
+              <div className="flex items-center justify-between gap-2">
               <Input
                 id="password"
                 name="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                placeholder={!showPassword ? "********" : "Password"}
                 className="focus-visible:ring-0"
               />
+              <Button
+            type="button"
+            variant={"default"}
+            onClick={() => setShowPassword((v) => !v)}
+            className={cn("flex items-center bg-primary/25 hover:bg-primary/50 border-1 border-primary/25", showPassword && "bg-primary/50")}
+            aria-label={showPassword ? "Hide password" : "Show password"}
+          >
+            {showPassword ? (
+              <EyeSlash weight="duotone" size={20} className="" />
+            ) : (
+              <Eye weight="duotone" size={20} className="" />
+            )}
+          </Button>
+          </div>
             </div>
 
             <Button type="submit" className="w-full" disabled={isLoading}>

@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import LoginForm from "./LoginForm";
 
 export default async function LoginPage() {
   const supabase = await createClient();
@@ -42,7 +43,8 @@ export default async function LoginPage() {
 
         <CardContent className="space-y-4">
           {/* Email + Password */}
-          <form action={login} className="space-y-4">
+          <LoginForm />
+          {/* <form action={login} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -56,18 +58,23 @@ export default async function LoginPage() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
+              <div className="flex items-center justify-between gap-2">
               <Input
                 id="password"
                 name="password"
                 type="password"
+                placeholder = "********"
                 required
                 className="focus-visible:ring-0"
               />
+              <Button variant="default" className="">
+              </Button>
+              </div>
             </div>
             <Button type="submit" className="w-full">
               Sign in
             </Button>
-          </form>
+          </form> */}
 
           <div className="relative my-4">
             <div className="absolute inset-0 flex items-center">

@@ -46,7 +46,7 @@ export default function LoginPageClient() {
       )}
       <Button
         variant="default"
-        className="w-full bg-primary/25 hover:bg-primary/50"
+        className="w-full bg-primary/25 hover:bg-primary/50 border-1 border-primary/25"
         onClick={handleGoogle}
         disabled={loading}
       >

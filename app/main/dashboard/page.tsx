@@ -183,9 +183,9 @@ export default function DashboardPage() {
             <DropdownMenuTrigger asChild>
               <Button variant="default" size="sm" className="px-2">
                 <Funnel weight="duotone" size={16} />
-                {sentimentFilter !== "all" && (
+                {sentimentFilter !== "all" ? (
                   <span className="ml-1 capitalize">{sentimentFilter}</span>
-                )}
+                ) : (<span className="ml-1 capitalize">Filter</span>)}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="bg-background space-y-1" side="bottom" align={isMobile ? "start" : "end"}>
