@@ -29,7 +29,7 @@ export default async function LoginPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[var(--background)] relative px-4">
-      <Image src="/Background.png" alt="Hero" fill className="object-cover w-fill h-full absolute top-0 left-0 opacity-60" />
+      <Image src="/Background.png" alt="Hero" fill className="object-cover w-fill h-full absolute top-0 left-0 opacity-60" priority />
       <Card className="w-full max-w-md z-10">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">
