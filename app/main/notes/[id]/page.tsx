@@ -23,6 +23,7 @@ import {
 import { BounceLoader, SyncLoader } from "react-spinners";
 import { cn } from "@/lib/utils";
 import useIsMobile from "@/hooks/useIsMobile";
+import { RichTextEditor } from "@/components/rich-text-editor";
 
 interface DateItem {
   label: string;
@@ -60,6 +61,10 @@ export default function NotePage() {
   const [tags, setTags] = useState<string[]>([]);
   const [sentiment, setSentiment] = useState<string | null>(null);
   const [isCopied, setIsCopied] = useState(false);
+  const [qaQuestion, setQaQuestion] = useState("");
+  const [qaAnswer, setQaAnswer] = useState<string | null>(null);
+  const [qaLoading, setQaLoading] = useState(false);
+  const [qaError, setQaError] = useState<string | null>(null);
 
   // 3) Initialize state from loaded note (including previously saved summary)
   useEffect(() => {
@@ -169,6 +174,29 @@ export default function NotePage() {
     setTimeout(() => setIsCopied(false), 2000);
   };
 
+  async function handleAskQuestion() {
+    setQaLoading(true);
+    setQaError(null);
+    setQaAnswer(null);
+    try {
+      const res = await fetch("/api/qa", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content, question: qaQuestion }),
+      });
+      const data = await res.json();
+      if (!res.ok || data.error) {
+        setQaError(data.error || "Failed to get answer");
+      } else {
+        setQaAnswer(data.answer);
+      }
+    } catch (err: any) {
+      setQaError(err.message || "Unknown error");
+    } finally {
+      setQaLoading(false);
+    }
+  }
+
   if (isLoading) return <div className="p-4 w-full h-full flex items-center justify-center"><BounceLoader color="#B2AC88" /></div>;
   if (isError)   return <p className="p-4 text-red-500">Error loading note.</p>;
 
@@ -181,7 +209,7 @@ export default function NotePage() {
         placeholder="Note Title"
         className="!text-4xl font-semibold border-none shadow-none focus-visible:ring-0 w-full"
       />
-      <div className="space-y-4 h-screen overflow-auto">
+      <div className="space-y-4 h-screen overflow-auto relative">
       {/* Summary panel */}
       <div className="space-y-4">
         {summary ? (
@@ -307,13 +335,29 @@ export default function NotePage() {
         )}
       </div>
 
+      {/* AI Q&A */}
+      <div className="max-w-xl bg-neutral-50 p-4 rounded-lg space-y-2 mb-4">
+        <h2 className="font-semibold text-lg mb-2">AI Q&A</h2>
+        <div className="flex gap-2 items-center">
+          <Input
+            value={qaQuestion}
+            onChange={e => setQaQuestion(e.target.value)}
+            placeholder="Ask a question about this note..."
+            className="flex-1"
+            onKeyDown={e => { if (e.key === 'Enter') handleAskQuestion(); }}
+          />
+          <Button onClick={handleAskQuestion} disabled={qaLoading || !qaQuestion.trim()}>
+            {qaLoading ? "Asking..." : "Ask"}
+          </Button>
+        </div>
+        {qaError && <div className="text-red-500 text-sm mt-2">{qaError}</div>}
+        {qaAnswer && <div className="mt-2 text-base bg-background p-2 rounded">{qaAnswer}</div>}
+      </div>
+
       {/* Content editor */}
-      <Textarea
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        placeholder="Write your note here…"
-        rows={6}
-        className="border-none shadow-none focus-visible:ring-0 !w-full !text-lg !font-light"
+      <RichTextEditor
+        content={content}
+        onChange={setContent}
       />
       </div>
 

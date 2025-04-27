@@ -11,7 +11,7 @@ export async function POST(request: Request) {
 You are a smart note assistant. Analyze the following note text and respond with valid JSON containing these keys:
 - summary: a concise English summary (1–2 sentences)
 - dates: an array of { "label": string, "date": "YYYY-MM-DD" } for any dates mentioned
-- actions: an array of action items extracted from imperatives
+- actions: an array of strings of action items extracted from imperatives
 - tags: an array of up to 5 keywords
 - sentiment: one of ["urgent","neutral","positive"]
 
