@@ -211,10 +211,11 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
                       Update Link
                     </Button>
                     <Button 
-                      variant="outline" 
+                      variant="default" 
                       size="icon"
                       onClick={openLink}
                       title="Open in new tab"
+                      className="bg-background hover:bg-primary/25"
                     >
                       <ExternalLink className="h-4 w-4" />
                     </Button>
