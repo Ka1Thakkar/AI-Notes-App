@@ -7,7 +7,7 @@ export async function POST(request: Request) {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
     const prompt = `
-You are a helpful assistant. Given the following note text, answer the user's question as clearly and concisely as possible. If the answer is not in the note, say "I couldn't find the answer in the note.".
+You are a helpful assistant. Given the following note text, answer the user's question as clearly and concisely as possible, and use markdown, like bold, italics and bullet points etc, in the answer. If the answer is not in the note, say "I couldn't find the answer in the note.".
 
 Note text:
 ${content}

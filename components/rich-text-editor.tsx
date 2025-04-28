@@ -132,9 +132,9 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
   };
 
   return (
-    <div className="rounded-lg relative" ref={editorRef}>
+    <div className=" relative border border-primary/25" ref={editorRef}>
       {/* Top editing toolbar */}
-      <div className="bg-primary z-10 sticky top-0 border-b border-primary/15 w-full rounded-t-lg shadow-sm p-2 flex items-center gap-1">
+      <div className="bg-primary z-10 sticky top-0 border-b border-primary/15 w-full shadow-sm p-2 flex items-center gap-1">
         <Button
           variant="default"
           size="sm"
@@ -204,7 +204,7 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
                         addLink();
                       }
                     }}
-                    className="w-full p-2 text-base"
+                    className="w-full p-2 text-base focus-visible:ring-0"
                   />
                   <div className="flex gap-2">
                     <Button onClick={addLink} className="flex-1">
@@ -266,7 +266,7 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
                         addLink();
                       }
                     }}
-                    className="w-full p-2 text-base"
+                    className="w-full p-2 text-base focus-visible:ring-0"
                   />
                   <Button onClick={addLink} className="w-full">
                     Add Link
@@ -376,7 +376,7 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
                             addLink();
                           }
                         }}
-                        className="w-full p-2 text-base"
+                        className="w-full p-2 text-base focus-visible:ring-0"
                       />
                       <div className="flex gap-2">
                         <Button onClick={addLink} className="flex-1">
@@ -456,7 +456,7 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
                           addLink();
                         }
                       }}
-                      className="w-full p-2 text-base"
+                      className="w-full p-2 text-base focus-visible:ring-0"
                     />
                     <Button onClick={addLink} className="w-full">
                       Add Link

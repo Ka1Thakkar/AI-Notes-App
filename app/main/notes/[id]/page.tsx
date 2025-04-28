@@ -19,11 +19,19 @@ import {
   Trash,
   CheckFat,
   FloppyDisk,
+  PushPin,
+  PushPinSlash,
 } from "@phosphor-icons/react";
 import { BounceLoader, SyncLoader } from "react-spinners";
 import { cn } from "@/lib/utils";
 import useIsMobile from "@/hooks/useIsMobile";
 import { RichTextEditor } from "@/components/rich-text-editor";
+import TurndownService from "turndown";
+import { jsPDF } from "jspdf";
+import { saveAs } from "file-saver";
+import { Document, Packer, Paragraph } from "docx";
+import mammoth from "mammoth";
+import Markdown from 'react-markdown'
 
 interface DateItem {
   label: string;
@@ -43,7 +51,7 @@ export default function NotePage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("notes")
-        .select("title, content, summary, dates, actions, tags, sentiment")
+        .select("title, content, summary, dates, actions, tags, sentiment, pinned")
         .eq("id", id)
         .single();
       if (error) throw error;
@@ -65,6 +73,7 @@ export default function NotePage() {
   const [qaAnswer, setQaAnswer] = useState<string | null>(null);
   const [qaLoading, setQaLoading] = useState(false);
   const [qaError, setQaError] = useState<string | null>(null);
+  const [pinned, setPinned] = useState(false);
 
   // 3) Initialize state from loaded note (including previously saved summary)
   useEffect(() => {
@@ -78,6 +87,7 @@ export default function NotePage() {
       setTags(note.tags ?? []);
       setSentiment(note.sentiment ?? null);
     }
+    setPinned(note.pinned ?? false);
   }, [note]);
 
   // 4) Save (update) mutation for title/content
@@ -197,23 +207,98 @@ export default function NotePage() {
     }
   }
 
+  // Export handlers
+  function handleExportPDF() {
+    const doc = new jsPDF();
+    doc.text(title, 10, 10);
+    doc.text("\n", 10, 20);
+    const pageWidth = doc.internal.pageSize.getWidth() - 20; // 10 margin on each side
+    const lines = doc.splitTextToSize(content.replace(/<[^>]+>/g, ''), pageWidth);
+    doc.text(lines, 10, 30);
+    doc.save(`${title || "note"}.pdf`);
+  }
+
+  function handleExportMarkdown() {
+    const turndownService = new TurndownService();
+    const md = turndownService.turndown(content);
+    const blob = new Blob([md], { type: "text/markdown" });
+    saveAs(blob, `${title || "note"}.md`);
+  }
+
+  async function handleExportWord() {
+    const doc = new Document({
+      sections: [
+        {
+          properties: {},
+          children: [
+            new Paragraph({ text: title, heading: "Heading1" }),
+            new Paragraph({ text: content.replace(/<[^>]+>/g, '') }),
+          ],
+        },
+      ],
+    });
+    const blob = await Packer.toBlob(doc);
+    saveAs(blob, `${title || "note"}.docx`);
+  }
+
+  // Import handlers
+  async function handleImportFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.name.endsWith('.md')) {
+      const text = await file.text();
+      setContent(text); // You may want to convert markdown to HTML for the editor
+    } else if (file.name.endsWith('.docx')) {
+      const arrayBuffer = await file.arrayBuffer();
+      const result = await mammoth.convertToHtml({ arrayBuffer });
+      setContent(result.value);
+    }
+  }
+
   if (isLoading) return <div className="p-4 w-full h-full flex items-center justify-center"><BounceLoader color="#B2AC88" /></div>;
   if (isError)   return <p className="p-4 text-red-500">Error loading note.</p>;
 
   return (
     <div className="p-6 h-screen w-full flex flex-col gap-5 overflow-auto">
-      {/* Title editor */}
-      <Input
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="Note Title"
-        className="!text-4xl font-semibold border-none shadow-none focus-visible:ring-0 w-full"
-      />
+      {/* Title editor + Export/Import */}
+      <div className="flex items-center gap-2">
+        <Input
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Note Title"
+          className="!text-4xl font-semibold border-none shadow-none focus-visible:ring-0 w-full"
+        />
+        <Button
+          variant={"default"}
+          onClick={async () => {
+            const { error } = await supabase
+              .from("notes")
+              .update({ pinned: !pinned })
+              .eq("id", id);
+            if (!error) setPinned(!pinned);
+          }}
+          size="icon"
+          title={pinned ? "Unpin" : "Pin"}
+          className={cn(pinned && "bg-secondary/75 hover:bg-secondary/50")}
+        >
+          {pinned ? <PushPin weight="duotone" /> : <PushPinSlash weight="duotone" />}
+        </Button>
+        {/* <div className="flex gap-1">
+          <Button onClick={handleExportPDF} variant="outline" size="sm">PDF</Button>
+          <Button onClick={handleExportMarkdown} variant="outline" size="sm">MD</Button>
+          <Button onClick={handleExportWord} variant="outline" size="sm">Word</Button>
+          <label className="inline-block cursor-pointer bg-primary/10 px-3 py-2 rounded text-xs font-medium">
+            Import
+            <input type="file" accept=".md,.docx" onChange={handleImportFile} className="hidden" />
+          </label>
+        </div> */}
+      </div>
       <div className="space-y-4 h-screen overflow-auto relative">
       {/* Summary panel */}
-      <div className="space-y-4">
+      <div className={cn("flex gap-y-5 w-full gap-x-4 justify-between items-start", isMobile && "flex-col")}>
+      <div className={cn("space-y-4 w-6/12 max-w-xl", isMobile && "w-full")}>
         {summary ? (
-          <div className="max-w-xl rounded-lg">
+          <div className="rounded-lg">
             <div className="bg-neutral-50 p-4 rounded-lg space-y-4">
             <h1 className="flex items-center gap-2 text-lg font-semibold">
               <Lightning weight="duotone" className="text-yellow-600" />
@@ -336,14 +421,14 @@ export default function NotePage() {
       </div>
 
       {/* AI Q&A */}
-      <div className="max-w-xl bg-neutral-50 p-4 rounded-lg space-y-2 mb-4">
+      <div className={cn("w-6/12 max-w-xl bg-neutral-50 p-4 rounded-lg space-y-4 mb-4", isMobile && "w-full" )}>
         <h2 className="font-semibold text-lg mb-2">AI Q&A</h2>
         <div className="flex gap-2 items-center">
           <Input
             value={qaQuestion}
             onChange={e => setQaQuestion(e.target.value)}
             placeholder="Ask a question about this note..."
-            className="flex-1"
+            className="flex-1 focus-visible:ring-0"
             onKeyDown={e => { if (e.key === 'Enter') handleAskQuestion(); }}
           />
           <Button onClick={handleAskQuestion} disabled={qaLoading || !qaQuestion.trim()}>
@@ -351,7 +436,8 @@ export default function NotePage() {
           </Button>
         </div>
         {qaError && <div className="text-red-500 text-sm mt-2">{qaError}</div>}
-        {qaAnswer && <div className="mt-2 text-base bg-background p-2 rounded">{qaAnswer}</div>}
+        {qaAnswer && <div className="mt-2 text-sm bg-primary/25 p-2 rounded"><Markdown>{qaAnswer}</Markdown></div>}
+      </div>
       </div>
 
       {/* Content editor */}

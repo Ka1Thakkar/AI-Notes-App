@@ -34,7 +34,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import { Funnel, Lightning, MagnifyingGlass, Trash } from "@phosphor-icons/react";
+import { Funnel, Lightning, MagnifyingGlass, Trash, PushPin, PushPinSlash } from "@phosphor-icons/react";
 import { MoreHorizontal, Plus } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
@@ -47,6 +47,7 @@ interface Note {
   created_at: string;
   summary: string;
   sentiment?: string;
+  pinned?: boolean;
 }
 
 export default function DashboardPage() {
@@ -136,14 +137,19 @@ export default function DashboardPage() {
     queryKey: ["notes", search, sentimentFilter],
     queryFn: async () => {
       const { data, error } = await supabase
-        .rpc("search_notes", { term: search.trim() }).order("created_at", { ascending: false });
+        .rpc("search_notes", { term: search.trim() })
+        .order("pinned", { ascending: false })
+        .order("created_at", { ascending: false });
       if (error) throw error;
       return data;
     },
     placeholderData: (prev) => prev,
   });
 
-  const displayed = notes.filter((n) =>
+  // Sort pinned notes first (in case backend doesn't)
+  const sortedNotes = [...(notes || [])].sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
+
+  const displayed = sortedNotes.filter((n) =>
     sentimentFilter === "all" ? true : n.sentiment === sentimentFilter
   );
 
@@ -302,40 +308,59 @@ export default function DashboardPage() {
         {displayed.map((note) => (
           <div key={note.id} className="relative">
             <Link href={`/main/notes/${note.id}`} className="h-full">
-              <Card className="cursor-pointer h-full p-5 bg-[var(--card)] text-[var(--card-foreground)] flex flex-col justify-between">
+              <Card className="cursor-pointer h-full p-5 bg-background text-[var(--card-foreground)] flex flex-col justify-between">
                 <div>
                   <div className="flex justify-between items-center">
                     <div className="truncate text-lg font-semibold">
                       {note.title || "Untitled"}
                     </div>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="p-1 hover:bg-[var(--primary)]/5 hover:text-[var(--foreground)]"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <MoreHorizontal />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="bg-white hover:bg-accent transition-all p-0">
-                        <DropdownMenuItem
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            deleteNote.mutate(note.id);
-                          }}
-                          className="bg-white hover:bg-accent transition-all p-2"
-                        >
-                          <Trash className="hover:text-white" weight="duotone" />
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <div className="flex items-center">
+                      <Button
+                        variant="default"
+                        size="icon"
+                        title={note.pinned ? "Unpin" : "Pin"}
+                        onClick={async (e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          await supabase
+                            .from("notes")
+                            .update({ pinned: !note.pinned })
+                            .eq("id", note.id);
+                          qc.invalidateQueries({ queryKey: ["notes"] });
+                        }}
+                        className="hover:bg-background bg-background shadow-none"
+                      >
+                        {note.pinned ? <PushPin weight="duotone" className="text-secondary" /> : <PushPinSlash weight="duotone" className="text-secondary" />}
+                      </Button>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="p-1 hover:bg-[var(--primary)]/5 hover:text-[var(--foreground)]"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <MoreHorizontal />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="bg-white hover:bg-accent transition-all p-0">
+                          <DropdownMenuItem
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              deleteNote.mutate(note.id);
+                            }}
+                            className="bg-white hover:bg-accent transition-all p-2"
+                          >
+                            <Trash className="hover:text-white" weight="duotone" />
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
                   </div>
                   <p className="text-sm text-[var(--muted-foreground)] line-clamp-3 pt-2">
-                    {note.content}
+                    {note.content.replace(/<[^>]+>/g, "")}
                   </p>
                 </div>
                 <div className="space-y-2">
