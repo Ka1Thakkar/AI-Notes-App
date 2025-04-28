@@ -299,7 +299,7 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
         editor={editor}
         className="max-w-none p-4 min-h-[200px] focus:outline-none focus:ring-0 focus:border-transparent focus-visible:outline-none focus-visible:ring-0 focus-visible:border-transparent"
       />
-      {editor && (
+      {/* {editor && (
         <BubbleMenu
           editor={editor}
           tippyOptions={{ duration: 100 }}
@@ -484,7 +484,7 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
             <Redo className="h-4 w-4" />
           </Button>
         </BubbleMenu>
-      )}
+      )} */}
     </div>
   );
 } 
